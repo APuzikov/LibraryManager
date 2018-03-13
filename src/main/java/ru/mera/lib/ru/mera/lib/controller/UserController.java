@@ -29,8 +29,8 @@ public class UserController {
         return userService.getOneUser(id);
     }
 
-    @PostMapping("/remove")
-    public String removeUser(@RequestBody int id) {
+    @GetMapping("/remove/{id}")
+    public String removeUser(@PathVariable int id) {
         return userService.removeUser(id);
     }
 }
