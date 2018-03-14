@@ -1,10 +1,10 @@
-package ru.mera.lib.ru.mera.lib.service;
+package ru.mera.lib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import ru.mera.lib.ru.mera.lib.entity.User;
-import ru.mera.lib.ru.mera.lib.repository.UserRepository;
+import ru.mera.lib.entity.User;
+import ru.mera.lib.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

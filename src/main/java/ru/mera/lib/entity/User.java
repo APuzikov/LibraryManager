@@ -1,4 +1,4 @@
-package ru.mera.lib.ru.mera.lib.entity;
+package ru.mera.lib.entity;
 
 import javax.persistence.*;
 

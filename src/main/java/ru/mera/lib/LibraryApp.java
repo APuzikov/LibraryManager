@@ -1,4 +1,4 @@
-package ru.mera.lib.ru.mera.lib;
+package ru.mera.lib;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

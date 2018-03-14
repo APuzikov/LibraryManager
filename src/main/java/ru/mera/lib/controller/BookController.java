@@ -1,9 +1,9 @@
-package ru.mera.lib.ru.mera.lib.controller;
+package ru.mera.lib.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.mera.lib.ru.mera.lib.entity.Book;
-import ru.mera.lib.ru.mera.lib.service.BookService;
+import ru.mera.lib.entity.Book;
+import ru.mera.lib.service.BookService;
 
 import java.util.List;
 

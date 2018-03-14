@@ -1,4 +1,4 @@
-package ru.mera.lib.ru.mera.lib.entity;
+package ru.mera.lib.entity;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,6 +20,9 @@ public class Pupil {
 
     @Column(name = "className")
     private String className;
+
+    @Column(name = "enable")
+    private boolean enable;
 
     @ManyToMany(mappedBy = "pupils")
     private List<Book> books;
@@ -54,6 +57,14 @@ public class Pupil {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public List<Book> getBooks() {

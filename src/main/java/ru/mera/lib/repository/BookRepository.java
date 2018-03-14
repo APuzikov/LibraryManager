@@ -1,8 +1,8 @@
-package ru.mera.lib.ru.mera.lib.repository;
+package ru.mera.lib.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.mera.lib.ru.mera.lib.entity.Book;
+import ru.mera.lib.entity.Book;
 
 import java.util.List;
 
