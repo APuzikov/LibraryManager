@@ -3,6 +3,7 @@ package ru.mera.lib.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.mera.lib.JsonResponse;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.repository.PupilRepository;
 
@@ -15,16 +16,26 @@ public class PupilService {
     @Autowired
     private PupilRepository pupilRepository;
 
-    public String savePupil(Pupil pupil){
-        try {
-            Assert.notNull(pupil, "Pupil can't be null!");
-            Assert.hasText(pupil.getName(), "Name of pupil is empty!");
-            Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
-            pupilRepository.save(pupil);
-            return "Pupil saved successfully!";
-        } catch (Exception e){
-            return "Can't save pupil: " + e.getMessage();
+    private boolean pupilNotExist(Pupil pupil){
+        Pupil pupilFromDB = pupilRepository.findByNameAndClassNumberAndClassName(pupil.getName(),
+                pupil.getClassNumber(), pupil.getClassName());
+        return pupilFromDB == null;
+    }
+
+    public JsonResponse savePupil(Pupil pupil){
+        if (pupilNotExist(pupil)) {
+            try {
+                Assert.notNull(pupil, "Pupil can't be null!");
+                Assert.hasText(pupil.getName(), "Name of pupil is empty!");
+                Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
+
+                pupilRepository.save(pupil);
+                return new JsonResponse(true, "Pupil saved successfully!");
+            } catch (Exception e) {
+                return new JsonResponse(false, "Can't save pupil: " + e.getMessage());
+            }
         }
+        return new JsonResponse(false, "Pupil already exist!");
     }
 
     public List<Pupil> getAllPupils(){
@@ -37,36 +48,35 @@ public class PupilService {
         return null;
     }
 
-    public String removePupil(int id){
-        Optional<Pupil> opPupil = pupilRepository.findById(id);
-        if (opPupil.isPresent()){
-            Pupil pupil = opPupil.get();
-            pupilRepository.delete(pupil);
-            return "Pupil successfully deleted!";
-        }
+//    public JsonResponse removePupil(int id){
+//        Optional<Pupil> opPupil = pupilRepository.findById(id);
+//        if (opPupil.isPresent()){
+//            Pupil pupil = opPupil.get();
+//            pupilRepository.delete(pupil);
+//            return new JsonResponse(true,"Pupil successfully deleted!");
+//        }
+//        return new JsonResponse(false, "This pupil isn't exist!");
+//    }
 
-        return "This pupil isn't exist!";
-    }
-
-    public String activatePupil(int id){
+    public JsonResponse activatePupil(int id){
         Optional<Pupil> opPupil = pupilRepository.findById(id);
         if (opPupil.isPresent()) {
             Pupil pupil = opPupil.get();
             pupil.setEnable(true);
             pupilRepository.save(pupil);
-            return "Pupil successfully activated!";
+            return new JsonResponse(true, "Pupil successfully activated!");
         }
-        return "This pupil isn't exist!";
+        return new JsonResponse(false, "This pupil isn't exist!");
     }
 
-    public String deactivatePupil(int id){
+    public JsonResponse deactivatePupil(int id){
         Optional<Pupil> opPupil = pupilRepository.findById(id);
         if (opPupil.isPresent()) {
             Pupil pupil = opPupil.get();
             pupil.setEnable(false);
             pupilRepository.save(pupil);
-            return "Pupil is inactive!";
+            return new JsonResponse(true, "Pupil is inactive!");
         }
-        return "This pupil isn't exist!";
+        return new JsonResponse(false, "This pupil isn't exist!");
     }
 }

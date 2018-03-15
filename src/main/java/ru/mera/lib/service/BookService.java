@@ -3,6 +3,7 @@ package ru.mera.lib.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.mera.lib.JsonResponse;
 import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.entity.Book;
 
@@ -14,7 +15,7 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public String saveBook(Book book) {
+    public JsonResponse saveBook(Book book) {
         try {
             Assert.notNull(book, "Book can't be null!");
             Assert.hasText(book.getAuthor(), "Author is empty!");
@@ -22,9 +23,9 @@ public class BookService {
             Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
             Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
             bookRepository.save(book);
-            return "Book successfully saved!";
+            return new JsonResponse(true,"Book successfully saved!");
         } catch (Exception e){
-            return "Can't save book: " + e.getMessage();
+            return new JsonResponse(false,"Can't save book: " + e.getMessage());
         }
     }
 
@@ -38,13 +39,13 @@ public class BookService {
         return null;
     }
 
-    public String removeBook(int id) {
+    public JsonResponse removeBook(int id) {
         Optional<Book> opBook = bookRepository.findById(id);
         if (opBook.isPresent()) {
             Book book = opBook.get();
             bookRepository.delete(book);
-            return "Book successfully deleted!";
+            return new JsonResponse(true,"Book successfully deleted!");
         }
-        return "This book in't exist!";
+        return new JsonResponse(false, "This book in't exist!");
     }
 }
