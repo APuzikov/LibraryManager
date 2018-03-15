@@ -23,7 +23,7 @@ public class BookController {
     @PutMapping("/updateBook/{id}")
     public JsonResponse updateBook(@RequestBody Book book, @PathVariable int id){
         book.setId(id);
-        return bookService.saveBook(book);
+        return bookService.updateBook(book);
     }
 
     @GetMapping("/getAllBooks")

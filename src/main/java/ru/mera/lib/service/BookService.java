@@ -15,7 +15,29 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    private boolean bookNotExist(Book book){
+        Book bookFromDB = bookRepository.findByTitleAndAuthorAndPublishYearAndClassNumber(book.getTitle(),
+                book.getAuthor(), book.getPublishYear(), book.getClassNumber());
+        return bookFromDB == null;
+    }
+
     public JsonResponse saveBook(Book book) {
+        if(bookNotExist(book)) {
+            try {
+                Assert.notNull(book, "Book can't be null!");
+                Assert.hasText(book.getAuthor(), "Author is empty!");
+                Assert.hasText(book.getTitle(), "Title is empty!");
+                Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
+                Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
+                bookRepository.save(book);
+                return new JsonResponse(true, "Book successfully saved!");
+            } catch (Exception e) {
+                return new JsonResponse(false, "Can't save book: " + e.getMessage());
+            }
+        } return new JsonResponse(false, "Book already exist!");
+    }
+
+    public JsonResponse updateBook(Book book){
         try {
             Assert.notNull(book, "Book can't be null!");
             Assert.hasText(book.getAuthor(), "Author is empty!");
@@ -23,9 +45,9 @@ public class BookService {
             Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
             Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
             bookRepository.save(book);
-            return new JsonResponse(true,"Book successfully saved!");
-        } catch (Exception e){
-            return new JsonResponse(false,"Can't save book: " + e.getMessage());
+            return new JsonResponse(true, "Book successfully updated!");
+        } catch (Exception e) {
+            return new JsonResponse(false, "Can't update book: " + e.getMessage());
         }
     }
 

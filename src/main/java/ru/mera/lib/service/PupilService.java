@@ -38,6 +38,19 @@ public class PupilService {
         return new JsonResponse(false, "Pupil already exist!");
     }
 
+    public JsonResponse updatePupil(Pupil pupil){
+        try {
+            Assert.notNull(pupil, "Pupil can't be null!");
+            Assert.hasText(pupil.getName(), "Name of pupil is empty!");
+            Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
+
+            pupilRepository.save(pupil);
+            return new JsonResponse(true, "Pupil updated successfully!");
+        } catch (Exception e) {
+            return new JsonResponse(false, "Can't update pupil: " + e.getMessage());
+        }
+    }
+
     public List<Pupil> getAllPupils(){
         return pupilRepository.findAll();
     }

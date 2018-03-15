@@ -23,7 +23,7 @@ public class PupilController {
     @PutMapping("/updatePupil/{id}")
     public JsonResponse updatePupil(@PathVariable int id, @RequestBody Pupil pupil){
         pupil.setId(id);
-        return pupilService.savePupil(pupil);
+        return pupilService.updatePupil(pupil);
     }
 
     @GetMapping("/getAllPupil")
