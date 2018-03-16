@@ -3,11 +3,13 @@ package ru.mera.lib.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.JsonResponse;
+import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.service.PupilService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v.1.0")
 public class PupilController {
@@ -20,7 +22,7 @@ public class PupilController {
         return pupilService.savePupil(pupil);
     }
 
-    @PutMapping("/updatePupil/{id}")
+    @PostMapping("/updatePupil/{id}")
     public JsonResponse updatePupil(@PathVariable int id, @RequestBody Pupil pupil){
         pupil.setId(id);
         return pupilService.updatePupil(pupil);
@@ -51,4 +53,8 @@ public class PupilController {
         return pupilService.deactivatePupil(id);
     }
 
+    @GetMapping("/getPupilBooks/{id}")
+    public List<Book> getPupilBooks(@PathVariable int id){
+        return pupilService.getPupilBooks(id);
+    }
 }

@@ -1,5 +1,7 @@
 package ru.mera.lib.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class Book {
     @Column(name = "publishYear")
     private int publishYear;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "record_cards", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "pupil_id"))

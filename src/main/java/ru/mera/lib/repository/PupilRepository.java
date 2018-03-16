@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PupilRepository extends JpaRepository<Pupil, Integer>{
-    List<Pupil> findByName(String name);
-
+    List<Pupil> findByEnable(boolean enable);
     Pupil findByNameAndClassNumberAndClassName(String name, int classNumber, String classname);
 }

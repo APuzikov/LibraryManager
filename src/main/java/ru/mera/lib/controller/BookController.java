@@ -8,6 +8,7 @@ import ru.mera.lib.service.BookService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v.1.0")
 public class BookController {
@@ -20,7 +21,7 @@ public class BookController {
         return bookService.saveBook(book);
     }
 
-    @PutMapping("/updateBook/{id}")
+    @PostMapping("/updateBook/{id}")
     public JsonResponse updateBook(@RequestBody Book book, @PathVariable int id){
         book.setId(id);
         return bookService.updateBook(book);

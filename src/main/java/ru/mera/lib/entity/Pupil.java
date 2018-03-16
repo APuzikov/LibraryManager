@@ -1,5 +1,7 @@
 package ru.mera.lib.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class Pupil {
     @Column(name = "enable")
     private boolean enable;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "pupils")
     private List<Book> books;
 
