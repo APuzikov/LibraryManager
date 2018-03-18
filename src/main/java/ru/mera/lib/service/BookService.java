@@ -4,9 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.mera.lib.JsonResponse;
+import ru.mera.lib.entity.Pupil;
+import ru.mera.lib.entity.RecordCard;
 import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.entity.Book;
+import ru.mera.lib.repository.RecordCardRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +18,12 @@ import java.util.Optional;
 public class BookService {
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private RecordCardRepository recordCardRepository;
+
+    @Autowired
+    private PupilService pupilService;
 
     private boolean bookNotExist(Book book){
         Book bookFromDB = bookRepository.findByTitleAndAuthorAndPublishYearAndClassNumber(book.getTitle(),
@@ -43,7 +53,7 @@ public class BookService {
             Assert.hasText(book.getAuthor(), "Author is empty!");
             Assert.hasText(book.getTitle(), "Title is empty!");
             Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
-            Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
+            Assert.isTrue(book.getCount() >= 0, "Count of books can't be less zero!");
             bookRepository.save(book);
             return new JsonResponse(true, "Book successfully updated!");
         } catch (Exception e) {
@@ -69,5 +79,14 @@ public class BookService {
             return new JsonResponse(true,"Book successfully deleted!");
         }
         return new JsonResponse(false, "This book in't exist!");
+    }
+
+    public List<Pupil> getBookPupils(int id) {
+        List<Pupil> pupils = new ArrayList<>();
+        List<RecordCard> recordCards = recordCardRepository.findByBookIdAndReturnDate(id, null);
+        for (RecordCard recordCard : recordCards){
+            pupils.add(pupilService.getOnePupil(recordCard.getPupilId()));
+        }
+        return pupils;
     }
 }

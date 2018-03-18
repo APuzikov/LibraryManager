@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.JsonResponse;
 import ru.mera.lib.entity.Book;
+import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.service.BookService;
 
 import java.util.List;
@@ -40,5 +41,10 @@ public class BookController {
     @DeleteMapping("/deleteBook/{id}")
     public JsonResponse removeBook(@PathVariable int id){
         return bookService.removeBook(id);
+    }
+
+    @GetMapping("/getBookPupils/{id}")
+    public List<Pupil> getBookPupils(@PathVariable int id){
+        return bookService.getBookPupils(id);
     }
 }

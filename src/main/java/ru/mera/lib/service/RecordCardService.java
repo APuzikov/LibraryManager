@@ -37,7 +37,7 @@ public class RecordCardService {
                         recordCardRepository.save(recordCard);
 
                         book.setCount(book.getCount() - 1);
-                        bookService.saveBook(book);
+                        bookService.updateBook(book);
                         return new JsonResponse(true, "The book was successfully received by pupil!");
                     } else return new JsonResponse(false,"This book has already been given to the pupil!");
                 } else return new JsonResponse(false, "Pupil isn't exist");
@@ -54,7 +54,7 @@ public class RecordCardService {
 
             Book book = bookService.getOneBook(bookId);
             book.setCount(book.getCount() + 1);
-            bookService.saveBook(book);
+            bookService.updateBook(book);
             return new JsonResponse(true, "Book was successfully returned!");
         } else return new JsonResponse(false, "This book was not given to this pupil!");
     }

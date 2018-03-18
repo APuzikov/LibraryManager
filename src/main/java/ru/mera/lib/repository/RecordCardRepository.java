@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface RecordCardRepository extends JpaRepository<RecordCard, Integer>{
     List<RecordCard> findByPupilIdAndReturnDate(int pupilId, String returnDate);
+    List<RecordCard> findByBookIdAndReturnDate(int bookId, String returnDate);
     RecordCard findByBookIdAndPupilIdAndReturnDate(int bookId, int pupilId, String returnDate);
 }

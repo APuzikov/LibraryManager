@@ -7,7 +7,6 @@ import ru.mera.lib.JsonResponse;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.entity.RecordCard;
-import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.repository.PupilRepository;
 import ru.mera.lib.repository.RecordCardRepository;
 
@@ -22,10 +21,10 @@ public class PupilService {
     private PupilRepository pupilRepository;
 
     @Autowired
-    private BookRepository bookRepository;
+    private RecordCardRepository recordCardRepository;
 
     @Autowired
-    private RecordCardRepository recordCardRepository;
+    private BookService bookService;
 
     private boolean pupilNotExist(Pupil pupil){
         Pupil pupilFromDB = pupilRepository.findByNameAndClassNumberAndClassName(pupil.getName(),
@@ -110,7 +109,7 @@ public class PupilService {
         List<Book> books = new ArrayList<>();
         List<RecordCard> recordCards = recordCardRepository.findByPupilIdAndReturnDate(id, null);
         for (RecordCard recordCard : recordCards){
-            books.add(bookRepository.getOne(recordCard.getBookId()));
+            books.add(bookService.getOneBook(recordCard.getBookId()));
         }
         return books;
     }

@@ -22,4 +22,5 @@ public class RecordCardController {
     public JsonResponse returnBook(@PathVariable int bookId, @PathVariable int pupilId){
         return recordCardService.returnBook(bookId, pupilId);
     }
+
 }
