@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading main-color-bg">
+                    <h3 class="panel-title">Pupil form</h3>
+                </div>
+                <div class="panel-body">
+                    <form name="createPupil">
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   id="name"
+                                   placeholder="Type user name"
+                                   required
+                                   tabindex="1"
+                                   ng-model="pupil.name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="class">Class</label>
+                            <input type="number" class="form-control" name="class"
+                                   id="class" required tabindex="2"
+                                   placeholder="User's grade"
+                                   ng-model="pupil.classNumber">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="classLetter">Class Letter</label>
+                            <input type="text" class="form-control" name="classLetter"
+                                   id="classLetter" required tabindex="2"
+                                   placeholder="Grade's letter"
+                                   ng-model="pupil.className">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-warning"
+                                    ng-click="vm.cancelCreation()">Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary"
+                                    ng-click="vm.createUser()">Save
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <toaster-container class="toaster main-toaster" toaster-options="{'animation-class': 'toast-top-right', 'limit': 5}"></toaster-container>
+</div>

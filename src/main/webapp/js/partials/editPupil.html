@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading main-color-bg">
+                    <h3 class="panel-title">Edit pupil</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form">
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   id="name"
+                                   placeholder="Type user name"
+                                   required
+                                   tabindex="1"
+                                   ng-model="vm.currentPupil.name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="class">Class</label>
+                            <input type="number" class="form-control" name="class"
+                                   id="class" required tabindex="2"
+                                   placeholder="User's grade"
+                                   ng-model="vm.currentPupil.classNumber">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="classLetter">Class Letter</label>
+                            <input type="text" class="form-control" name="classLetter"
+                                   id="classLetter" required tabindex="2"
+                                   placeholder="Grade's letter"
+                                   ng-model="vm.currentPupil.className">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-warning"
+                                    ng-click="vm.cancelUpdating()">Cancel
+                            </button>
+                            <button class="btn btn-primary"
+                                    ng-click="vm.updateUser()">Save
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <toaster-container class="toaster main-toaster"
+                       toaster-options="{'animation-class': 'toast-top-right', 'limit': 5}"></toaster-container>
+</div>

@@ -1,0 +1,58 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading main-color-bg">
+                    <h3 class="panel-title">Edit book</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form">
+
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" name="title"
+                                   id="title"
+                                   placeholder="Give a name to your device"
+                                   required
+                                   tabindex="1"
+                                   ng-model="vm.currentBook.title">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="author">Author</label>
+                            <input type="text" class="form-control" name="author"
+                                   id="author" required tabindex="2"
+                                   ng-model="vm.currentBook.author">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" class="form-control" name="amount"
+                                   id="amount" required tabindex="2"
+                                   ng-model="vm.currentBook.count">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="yearPublished">Year Published</label>
+                            <input type="number" class="form-control" name="yearPublished"
+                                   id="yearPublished" required tabindex="2"
+                                   ng-model="vm.currentBook.publishYear">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-warning"
+                                    ng-click="vm.cancelUpdating()">Cancel
+                            </button>
+                            <button class="btn btn-primary"
+                                    ng-click="vm.updateBook()">Save
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <toaster-container class="toaster main-toaster" toaster-options="{'animation-class': 'toast-top-right', 'limit': 5}"></toaster-container>
+</div>
