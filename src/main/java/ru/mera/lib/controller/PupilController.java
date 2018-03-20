@@ -9,7 +9,7 @@ import ru.mera.lib.service.PupilService;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v.1.0")
 public class PupilController {
@@ -30,7 +30,7 @@ public class PupilController {
 
     @GetMapping("/getAllPupil")
     public List<Pupil> getAllPupils(){
-        return pupilService.getAllPupils();
+        return pupilService.getAllPupils(true);
     }
 
     @GetMapping("/getpupil/{id}")
@@ -53,8 +53,20 @@ public class PupilController {
         return pupilService.deactivatePupil(id);
     }
 
+    //      возвращает все книги выданные ученику
     @GetMapping("/getPupilBooks/{id}")
     public List<Book> getPupilBooks(@PathVariable int id){
         return pupilService.getPupilBooks(id);
     }
+
+    @GetMapping("/getPupilCount")
+    public int getPupilCount(){
+        return pupilService.getPupilCount();
+    }
+
+    @GetMapping("/getAllDisabledPupil")
+    public List<Pupil> getAllDisabledPupils(){
+        return pupilService.getAllPupils(false);
+    }
+
 }

@@ -9,7 +9,7 @@ import ru.mera.lib.service.BookService;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v.1.0")
 public class BookController {
@@ -30,7 +30,7 @@ public class BookController {
 
     @GetMapping("/getAllBooks")
     public List<Book> getAllBooks(){
-        return bookService.getAllBooks();
+        return bookService.getAllBooks(true);
     }
 
     @GetMapping("/getBook/{id}")
@@ -43,8 +43,29 @@ public class BookController {
         return bookService.removeBook(id);
     }
 
+    //возвращает всех учеников, которым выдана эта книга
     @GetMapping("/getBookPupils/{id}")
     public List<Pupil> getBookPupils(@PathVariable int id){
         return bookService.getBookPupils(id);
+    }
+
+    @GetMapping("/getBookCount")
+    public int getBookCount(){
+        return bookService.getBookCount();
+    }
+
+    @GetMapping("/getAllDisabledBooks")
+    public List<Book> getAllDisabledBooks(){
+        return bookService.getAllBooks(false);
+    }
+
+    @GetMapping("/activateBook/{id}")
+    public JsonResponse activateBook(@PathVariable int id){
+        return bookService.activateBook(id);
+    }
+
+    @GetMapping("/deactivateBook/{id}")
+    public JsonResponse deactivateBook(@PathVariable int id){
+        return bookService.deactivateBook(id);
     }
 }

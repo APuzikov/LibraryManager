@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.JsonResponse;
 import ru.mera.lib.service.RecordCardService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v.1.0")
 public class RecordCardController {

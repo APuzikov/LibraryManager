@@ -39,6 +39,7 @@ public class BookService {
                 Assert.hasText(book.getTitle(), "Title is empty!");
                 Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
                 Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
+                book.setEnable(true);
                 bookRepository.save(book);
                 return new JsonResponse(true, "Book successfully saved!");
             } catch (Exception e) {
@@ -61,8 +62,8 @@ public class BookService {
         }
     }
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public List<Book> getAllBooks(boolean enable) {
+        return bookRepository.findByEnable(enable);
     }
 
     public Book getOneBook(int id) {
@@ -88,5 +89,31 @@ public class BookService {
             pupils.add(pupilService.getOnePupil(recordCard.getPupilId()));
         }
         return pupils;
+    }
+
+    public int getBookCount() {
+        return (int)bookRepository.count();
+    }
+
+    public JsonResponse activateBook(int id) {
+        Optional<Book> opBook = bookRepository.findById(id);
+        if (opBook.isPresent()){
+            Book book = opBook.get();
+            book.setEnable(true);
+            bookRepository.save(book);
+            return new JsonResponse(true, "Book successfully activated!");
+        }
+        return new JsonResponse(false, "This book isn't exist!");
+    }
+
+    public JsonResponse deactivateBook(int id) {
+        Optional<Book> opBook = bookRepository.findById(id);
+        if (opBook.isPresent()){
+            Book book = opBook.get();
+            book.setEnable(false);
+            bookRepository.save(book);
+            return new JsonResponse(true, "Book is inactive!");
+        }
+        return new JsonResponse(false, "This book isn't exist!");
     }
 }

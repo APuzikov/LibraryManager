@@ -28,6 +28,9 @@ public class Book {
     @Column(name = "publishYear")
     private int publishYear;
 
+    @Column(name = "enable")
+    private boolean enable;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "record_cards", joinColumns = @JoinColumn(name = "book_id"),
@@ -80,6 +83,14 @@ public class Book {
 
     public void setPublishYear(int publishYear) {
         this.publishYear = publishYear;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public List<Pupil> getPupils() {

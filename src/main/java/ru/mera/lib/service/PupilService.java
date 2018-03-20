@@ -62,8 +62,8 @@ public class PupilService {
         }
     }
 
-    public List<Pupil> getAllPupils(){
-        return pupilRepository.findByEnable(true);
+    public List<Pupil> getAllPupils(boolean enable){
+        return pupilRepository.findByEnable(enable);
         //return pupilRepository.findAll();
     }
 
@@ -112,5 +112,9 @@ public class PupilService {
             books.add(bookService.getOneBook(recordCard.getBookId()));
         }
         return books;
+    }
+
+    public int getPupilCount() {
+        return pupilRepository.findByEnable(true).size();
     }
 }
