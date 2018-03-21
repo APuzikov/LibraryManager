@@ -68,5 +68,4 @@ public class PupilController {
     public List<Pupil> getAllDisabledPupils(){
         return pupilService.getAllPupils(false);
     }
-
 }

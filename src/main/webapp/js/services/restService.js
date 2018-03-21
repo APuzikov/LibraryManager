@@ -25,7 +25,8 @@
          enablePupil: enablePupil,
          getDisabledBooks: getDisabledBooks,
          disableBook: disableBook,
-         enableBook: enableBook
+         enableBook: enableBook,
+         getPupilBooks: getPupilBooks
       };
 
       function saveUser(data) {
@@ -181,6 +182,14 @@
       function enableBook(id) {
          return $http.get(
             'http://localhost:8082/api/v.1.0/activateBook/' + id
+         )
+            .then(sendResponseData)
+            .catch(sendErrorData)
+      }
+
+      function getPupilBooks(id) {
+         return $http.get(
+            'http://localhost:8082/api/v.1.0/getPupilBooks/' + id
          )
             .then(sendResponseData)
             .catch(sendErrorData)

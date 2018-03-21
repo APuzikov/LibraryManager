@@ -38,10 +38,10 @@ public class BookController {
         return bookService.getOneBook(id);
     }
 
-    @DeleteMapping("/deleteBook/{id}")
-    public JsonResponse removeBook(@PathVariable int id){
-        return bookService.removeBook(id);
-    }
+//    @DeleteMapping("/deleteBook/{id}")
+//    public JsonResponse removeBook(@PathVariable int id){
+//        return bookService.removeBook(id);
+//    }
 
     //возвращает всех учеников, которым выдана эта книга
     @GetMapping("/getBookPupils/{id}")

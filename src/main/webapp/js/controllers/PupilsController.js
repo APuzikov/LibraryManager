@@ -2,9 +2,9 @@
    'use strict';
 
    angular.module('mainApp')
-      .controller('PupilsController', ['restService', '$scope', '$log', '$rootScope', '$location', 'toasterService', PupilsController]);
+      .controller('PupilsController', ['restService', '$scope', '$log', '$rootScope', '$location', 'toasterService', '$uibModal', '$document', PupilsController]);
 
-   function PupilsController(restService, $scope, $log, $rootScope, $location, toasterService) {
+   function PupilsController(restService, $scope, $log, $rootScope, $location, toasterService, $uibModal, $document) {
       var vm = this;
 
       restService.getAllUsers()
@@ -82,5 +82,52 @@
          toasterService.getConfiguredToaster('error', 'Error', 'Failed to' +
             ' load all disabled pupils');
       }
+
+      // Ui bootstrap modal
+
+      // TODO: запускать сервис при каждом слике на пользователя, пока что
+      // неккоректно отображаются книжки
+
+      vm.animationsEnabled = true;
+
+      vm.open = function (id, size, parentSelector) {
+         $log.debug(id);
+         var parentElem = parentSelector ?
+            angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+         var modalInstance = $uibModal.open({
+            animation: vm.animationsEnabled,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'myModalContent.html',
+            controller: 'ModalCtrl',
+            controllerAs: 'vm',
+            size: size,
+            appendTo: parentElem,
+            resolve: {
+               items: function () {
+                  restService.getPupilBooks(id)
+                     .then(getPupilBooksSuccess)
+                     .catch(getPupilBooksError);
+
+                  function getPupilBooksSuccess(response) {
+                     $log.debug(response);
+                     vm.items = response;
+                  }
+
+                  function getPupilBooksError(error) {
+                     $log.debug(error);
+                  }
+
+                  return vm.items;
+               }
+            }
+         });
+
+         modalInstance.result.then(function (selectedItem) {
+            vm.selected = selectedItem;
+         }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+         });
+      };
    }
 }());
