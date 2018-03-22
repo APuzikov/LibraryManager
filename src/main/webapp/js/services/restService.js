@@ -26,7 +26,10 @@
          getDisabledBooks: getDisabledBooks,
          disableBook: disableBook,
          enableBook: enableBook,
-         getPupilBooks: getPupilBooks
+         getPupilBooks: getPupilBooks,
+         returnBook: returnBook,
+         giveBook: giveBook,
+         getAllAvailableBooks: getAllAvailableBooks
       };
 
       function saveUser(data) {
@@ -195,6 +198,29 @@
             .catch(sendErrorData)
       }
 
+      function returnBook(bookId, pupilId) {
+         return $http.get(
+            'http://localhost:8082/api/v.1.0/returnBook/' + bookId + '/' + pupilId
+         )
+            .then(sendResponseData)
+            .catch(sendErrorData)
+      }
+
+      function giveBook(bookId, pupilId) {
+         return $http.get(
+            'http://localhost:8082/api/v.1.0/giveBook/' + bookId + '/' + pupilId
+         )
+            .then(sendResponseData)
+            .catch(sendErrorData)
+      }
+
+      function getAllAvailableBooks(pupilId) {
+         return $http.get(
+            'http://localhost:8082/api/v.1.0/getAllAvailableBooks/' + pupilId
+         )
+            .then(sendResponseData)
+            .catch(sendErrorData)
+      }
 
       function sendResponseData(response) {
          return response.data;

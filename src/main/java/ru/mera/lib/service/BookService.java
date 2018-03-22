@@ -120,7 +120,7 @@ public class BookService {
 
     public List<Book> getAllAvailableBooks(int pupilId) {
         List<Book> books = bookRepository.findByEnable(true);
-        
+
         return books.stream().filter(book -> recordCardRepository.
                 findByBookIdAndPupilIdAndReturnDate(book.getId(), pupilId, null) == null && book.getCount() > 0).
                 collect(Collectors.toList());

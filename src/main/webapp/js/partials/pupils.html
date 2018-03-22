@@ -18,8 +18,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="pupil in vm.allPupils"
-                                    ng-click="vm.open(pupil.id)">
+                                <tr ng-repeat="pupil in vm.allPupils">
                                     <td>{{pupil.name}}</td>
                                     <td>{{pupil.classNumber}}</td>
                                     <td>{{pupil.className}}</td>
@@ -29,6 +28,10 @@
                                                 class="btn btn-danger"
                                                 ng-click="vm.disablePupil(pupil.id)">
                                             Disable</a>
+                                        <a
+                                                class="btn btn-success"
+                                                ng-click="vm.open(pupil.id)">
+                                            Show books</a>
                                     </td>
                                 </tr>
 
@@ -46,8 +49,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="pupil in vm.allDisabledPupils"
-                                    ng-click="vm.open(pupil.id)">
+                                <tr ng-repeat="pupil in vm.allDisabledPupils">
                                     <td>{{pupil.name}}</td>
                                     <td>{{pupil.classNumber}}</td>
                                     <td>{{pupil.className}}</td>
@@ -57,9 +59,12 @@
                                                 class="btn btn-danger"
                                                 ng-click="vm.enablePupil(pupil.id)">
                                             Enable</a>
+                                        <a
+                                                class="btn btn-success"
+                                                ng-click="vm.open(pupil.id)">
+                                            Show books</a>
                                     </td>
                                 </tr>
-
                                 </tbody>
                             </table>
                         </uib-tab>
@@ -78,7 +83,7 @@
             <h3 class="modal-title" id="modal-title">Issued books</h3>
         </div>
         <div class="modal-body" id="modal-body">
-            <table class="table table-striped table-hover modal-table">
+            <table class="table modal-table table-striped table-hover">
                 <thead>
                 <tr>
                     <th>Title</th>
@@ -104,10 +109,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" ng-click="vm.ok()">
-                OK
-            </button>
-            <button class="btn btn-warning" type="button"
-                    ng-click="vm.cancel()">Cancel
+                Close
             </button>
         </div>
     </script>

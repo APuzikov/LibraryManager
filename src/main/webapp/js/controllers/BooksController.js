@@ -20,6 +20,9 @@
 
       function successfullyEnableBook(response) {
          $log.debug(response);
+         restService.getDisabledBooks()
+            .then(getDisabledBooksSuccess)
+            .catch(getDisabledBooksError);
          toasterService.getConfiguredToaster('success', 'Success', 'Successfully enable book');
       }
 
@@ -38,6 +41,9 @@
 
       function successfullyDisableBook(response) {
          $log.debug(response);
+         restService.getAllBooks()
+            .then(getAllBooksSuccess, null)
+            .catch(getAllBooksError);
          toasterService.getConfiguredToaster('success', 'Success', 'Successfully disable book');
       }
 

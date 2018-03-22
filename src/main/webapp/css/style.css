@@ -112,14 +112,7 @@ body {
 }
 
 /* Progress Bars */
-.progress-bar {
-    background: #333333;
-    color: #ffffff;
-}
 
-.dash-box {
-    text-align: center;
-}
 
 /* Table Style */
 .table > tbody > tr > td {
@@ -133,19 +126,26 @@ body {
 
 .table > tbody > tr > td > a {
     margin-top: -5px;
+    padding-top: 3px;
+    padding-bottom: 5px;
+}
+
+.modal-table > tbody > tr > td {
+    padding-top: 16px;
 }
 
 .modal-table > thead:first-child > tr:first-child > th:first-child {
-    padding: 15px 15px !important;
+    padding: 15px 15px;
 }
 
 .modal-table > tbody > tr > td:first-child {
-    padding: 15px 15px !important;
+    padding: 15px 15px;
+    padding-top: 16px;
 }
 
     /* Ui Bootstrap Modal */
 .modal-dialog {
-    margin-top: 116px !important;
+    margin-top: 116px;
 }
 
 .modal-body {
@@ -153,7 +153,7 @@ body {
 }
 
 .modal-header {
-    text-align: center !important;
+    text-align: center;
 }
 
 /* Footer */
