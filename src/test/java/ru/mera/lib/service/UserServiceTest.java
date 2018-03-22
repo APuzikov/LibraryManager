@@ -37,6 +37,8 @@ public class UserServiceTest {
         assertEquals(name, savedUser.getName());
         assertEquals(password, savedUser.getPassword());
         assertEquals(enable, savedUser.isEnable());
+
+        userService.removeUser(savedUser.getId());
     }
 
 }

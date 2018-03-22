@@ -33,6 +33,11 @@ public class BookController {
         return bookService.getAllBooks(true);
     }
 
+    @GetMapping("/getAllAvailableBooks/{pupilId}")
+    public List<Book> getAllAvailableBooks (@PathVariable int pupilId){
+        return bookService.getAllAvailableBooks(pupilId);
+    }
+
     @GetMapping("/getBook/{id}")
     public Book getOneBook(@PathVariable int id){
         return bookService.getOneBook(id);

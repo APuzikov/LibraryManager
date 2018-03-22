@@ -13,6 +13,7 @@ import ru.mera.lib.repository.RecordCardRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -115,5 +116,17 @@ public class BookService {
             return new JsonResponse(true, "Book is inactive!");
         }
         return new JsonResponse(false, "This book isn't exist!");
+    }
+
+    public List<Book> getAllAvailableBooks(int pupilId) {
+        List<Book> books = bookRepository.findByEnable(true);
+        List<Book> avBooks = new ArrayList<>();
+
+        for (Book book : books){
+            if (recordCardRepository.findByBookIdAndPupilIdAndReturnDate(book.getId(), pupilId, null) == null){
+                avBooks.add(book);
+            }
+        }
+        return avBooks;
     }
 }
