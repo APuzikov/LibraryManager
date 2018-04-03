@@ -2,7 +2,7 @@ package ru.mera.lib.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.mera.lib.JsonResponse;
+import ru.mera.lib.OperationStatus;
 import ru.mera.lib.service.RecordCardService;
 
 //@CrossOrigin(origins = "http://localhost:3000")
@@ -14,12 +14,12 @@ public class RecordCardController {
     private RecordCardService recordCardService;
 
     @GetMapping("/giveBook/{bookId}/{pupilId}")
-    public JsonResponse giveBook(@PathVariable int bookId, @PathVariable int pupilId){
+    public OperationStatus giveBook(@PathVariable int bookId, @PathVariable int pupilId){
         return recordCardService.giveBook(bookId, pupilId);
     }
 
     @GetMapping("/returnBook/{bookId}/{pupilId}")
-    public JsonResponse returnBook(@PathVariable int bookId, @PathVariable int pupilId){
+    public OperationStatus returnBook(@PathVariable int bookId, @PathVariable int pupilId){
         return recordCardService.returnBook(bookId, pupilId);
     }
 

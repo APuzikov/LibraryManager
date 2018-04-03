@@ -8,6 +8,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.mera.lib.entity.User;
 import ru.mera.lib.repository.UserRepository;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -20,25 +22,30 @@ public class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+//    @Test
+//    public void saveUser() throws Exception {
+//        String name = "SomeUser";
+//        String password = "password";
+//        boolean enable = true;
+//
+//        User user = new User();
+//        user.setName(name);
+//        user.setPassword(password);
+//        user.setEnable(enable);
+//
+//        userService.saveUser(user);
+//
+//        User savedUser = userRepository.findByUsernameAndPassword(name, password);
+//        assertEquals(name, savedUser.getName());
+//        assertEquals(password, savedUser.getPassword());
+//        assertEquals(enable, savedUser.isEnable());
+//
+//        userService.removeUser(savedUser.getId());
+//    }
+
     @Test
-    public void saveUser() throws Exception {
-        String name = "SomeUser";
-        String password = "password";
-        boolean enable = true;
-
-        User user = new User();
-        user.setName(name);
-        user.setPassword(password);
-        user.setEnable(enable);
-
-        userService.saveUser(user);
-
-        User savedUser = userRepository.findByNameAndPassword(name, password);
-        assertEquals(name, savedUser.getName());
-        assertEquals(password, savedUser.getPassword());
-        assertEquals(enable, savedUser.isEnable());
-
-        userService.removeUser(savedUser.getId());
+    public void findById() throws Exception{
+        Optional<User> user = userRepository.findById(28);
+        System.out.println(user);
     }
-
 }

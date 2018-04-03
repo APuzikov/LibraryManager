@@ -2,7 +2,7 @@ package ru.mera.lib.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.mera.lib.JsonResponse;
+import ru.mera.lib.OperationStatus;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.service.PupilService;
@@ -11,21 +11,26 @@ import java.util.List;
 
 //@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v.1.0")
+@RequestMapping("/api/v.1.0/pupils")
 public class PupilController {
 
     @Autowired
     private PupilService pupilService;
 
     @PostMapping("/createPupil")
-    public JsonResponse savePupil(@RequestBody Pupil pupil){
+    public OperationStatus savePupil(@RequestBody Pupil pupil){
         return pupilService.savePupil(pupil);
     }
 
     @PostMapping("/updatePupil/{id}")
-    public JsonResponse updatePupil(@PathVariable int id, @RequestBody Pupil pupil){
+    public OperationStatus updatePupil(@PathVariable int id, @RequestBody Pupil pupil){
         pupil.setId(id);
         return pupilService.updatePupil(pupil);
+    }
+
+    @PostMapping("/findPupils")
+    public List<Pupil> findPupils(@RequestBody Pupil pupil){
+        return pupilService.findPupils(pupil);
     }
 
     @GetMapping("/getAllPupil")
@@ -39,17 +44,17 @@ public class PupilController {
     }
 
 //    @DeleteMapping("/deletePupil/{id}")
-//    public JsonResponse removePupil(@PathVariable int id){
+//    public OperationStatus removePupil(@PathVariable int id){
 //        return pupilService.removePupil(id);
 //    }
 
     @GetMapping("/activatePupil/{id}")
-    public JsonResponse activatePupil(@PathVariable int id){
+    public OperationStatus activatePupil(@PathVariable int id){
         return pupilService.activatePupil(id);
     }
 
     @GetMapping("/deactivatePupil/{id}")
-    public JsonResponse deactivatePupil(@PathVariable int id){
+    public OperationStatus deactivatePupil(@PathVariable int id){
         return pupilService.deactivatePupil(id);
     }
 

@@ -22,8 +22,8 @@ public class BookServiceTest {
 
     @Test
     public void saveBook() throws Exception {
-        String title = "Some Book";
-        String author = "Some Author";
+        String title = "Some Book1";
+        String author = "Some Author1";
         int count = 10;
         int publishYear = 1998;
         int classNumber = 8;
@@ -46,6 +46,8 @@ public class BookServiceTest {
         assertEquals(count, savedBook.getCount());
         assertEquals(classNumber, savedBook.getClassNumber());
         assertEquals(enable, savedBook.isEnable());
+
+        bookRepository.delete(book);
     }
 
     @Test

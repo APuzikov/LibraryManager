@@ -3,7 +3,7 @@ package ru.mera.lib.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import ru.mera.lib.JsonResponse;
+import ru.mera.lib.OperationStatus;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.entity.RecordCard;
@@ -32,7 +32,7 @@ public class PupilService {
         return pupilFromDB == null;
     }
 
-    public JsonResponse savePupil(Pupil pupil){
+    public OperationStatus savePupil(Pupil pupil){
         if (pupilNotExist(pupil)) {
             try {
                 Assert.notNull(pupil, "Pupil can't be null!");
@@ -41,24 +41,24 @@ public class PupilService {
 
                 pupil.setEnable(true);
                 pupilRepository.save(pupil);
-                return new JsonResponse(true, "Pupil saved successfully!");
+                return new OperationStatus(true, "Pupil saved successfully!");
             } catch (Exception e) {
-                return new JsonResponse(false, "Can't save pupil: " + e.getMessage());
+                return new OperationStatus(false, "Can't save pupil: " + e.getMessage());
             }
         }
-        return new JsonResponse(false, "Pupil already exist!");
+        return new OperationStatus(false, "Pupil already exist!");
     }
 
-    public JsonResponse updatePupil(Pupil pupil){
+    public OperationStatus updatePupil(Pupil pupil){
         try {
             Assert.notNull(pupil, "Pupil can't be null!");
             Assert.hasText(pupil.getName(), "Name of pupil is empty!");
             Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
 
             pupilRepository.save(pupil);
-            return new JsonResponse(true, "Pupil updated successfully!");
+            return new OperationStatus(true, "Pupil updated successfully!");
         } catch (Exception e) {
-            return new JsonResponse(false, "Can't update pupil: " + e.getMessage());
+            return new OperationStatus(false, "Can't update pupil: " + e.getMessage());
         }
     }
 
@@ -73,36 +73,36 @@ public class PupilService {
         return null;
     }
 
-//    public JsonResponse removePupil(int id){
+//    public OperationStatus removePupil(int id){
 //        Optional<Pupil> opPupil = pupilRepository.findById(id);
 //        if (opPupil.isPresent()){
 //            Pupil pupil = opPupil.get();
 //            pupilRepository.delete(pupil);
-//            return new JsonResponse(true,"Pupil successfully deleted!");
+//            return new OperationStatus(true,"Pupil successfully deleted!");
 //        }
-//        return new JsonResponse(false, "This pupil isn't exist!");
+//        return new OperationStatus(false, "This pupil isn't exist!");
 //    }
 
-    public JsonResponse activatePupil(int id){
+    public OperationStatus activatePupil(int id){
         Optional<Pupil> opPupil = pupilRepository.findById(id);
         if (opPupil.isPresent()) {
             Pupil pupil = opPupil.get();
             pupil.setEnable(true);
             pupilRepository.save(pupil);
-            return new JsonResponse(true, "Pupil successfully activated!");
+            return new OperationStatus(true, "Pupil successfully activated!");
         }
-        return new JsonResponse(false, "This pupil isn't exist!");
+        return new OperationStatus(false, "This pupil isn't exist!");
     }
 
-    public JsonResponse deactivatePupil(int id){
+    public OperationStatus deactivatePupil(int id){
         Optional<Pupil> opPupil = pupilRepository.findById(id);
         if (opPupil.isPresent()) {
             Pupil pupil = opPupil.get();
             pupil.setEnable(false);
             pupilRepository.save(pupil);
-            return new JsonResponse(true, "Pupil is inactive!");
+            return new OperationStatus(true, "Pupil is inactive!");
         }
-        return new JsonResponse(false, "This pupil isn't exist!");
+        return new OperationStatus(false, "This pupil isn't exist!");
     }
 
     public List<Book> getPupilBooks(int id) {
@@ -116,5 +116,51 @@ public class PupilService {
 
     public int getPupilCount() {
         return pupilRepository.findByEnable(true).size();
+    }
+
+    public List<Pupil> findPupils(Pupil pupil){
+        if (pupil.getClassNumber() == 0 &&
+                pupil.getClassName() == null &&
+                pupil.getName() != null){
+            return pupilRepository.findByNameAndEnable(pupil.getName(), true);
+        }
+
+        if (pupil.getClassNumber() == 0 &&
+                pupil.getClassName() != null &&
+                pupil.getName() != null){
+            return pupilRepository.findByNameAndClassNameAndEnable(pupil.getName(), pupil.getClassName(), true);
+        }
+
+        if (pupil.getClassNumber() != 0 &&
+                pupil.getClassName() != null &&
+                pupil.getName() == null){
+            return pupilRepository.findByClassNumberAndClassNameAndEnable(pupil.getClassNumber(), pupil.getClassName(), true);
+        }
+
+        if (pupil.getClassNumber() == 0 &&
+                pupil.getClassName() != null &&
+                pupil.getName() != null){
+            return pupilRepository.findByNameAndClassNameAndEnable(pupil.getName(), pupil.getClassName(),true);
+        }
+
+        if (pupil.getClassNumber() != 0 &&
+                pupil.getClassName() == null &&
+                pupil.getName() != null){
+            return pupilRepository.findByNameAndClassNumberAndEnable(pupil.getName(), pupil.getClassNumber(),true);
+        }
+
+        if (pupil.getClassNumber() != 0 &&
+                pupil.getClassName() == null &&
+                pupil.getName() == null){
+            return pupilRepository.findByClassNumberAndEnable(pupil.getClassNumber(), true);
+        }
+
+        if (pupil.getClassNumber() == 0 &&
+                pupil.getClassName() != null &&
+                pupil.getName() == null){
+            return pupilRepository.findByClassNameAndEnable(pupil.getClassName(), true);
+        }
+
+        return null;
     }
 }

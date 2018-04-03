@@ -8,8 +8,22 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
-    List<Book> findByTitle(String title);
-    List<Book> findByAuthor(String author);
+
     Book findByTitleAndAuthorAndPublishYearAndClassNumber(String title, String author, int publishYear, int classNumber);
+
     List<Book> findByEnable(boolean enable);
+
+    List<Book> findByTitleAndEnable(String title, boolean enable);
+
+    List<Book> findByTitleAndAuthorAndEnable(String title, String author, boolean enable);
+
+    List<Book> findByTitleAndAuthorAndClassNumberAndEnable(String title, String author, int classNumber, boolean enable);
+
+    List<Book> findByTitleAndClassNumberAndEnable(String title, int classNumber, boolean enable);
+
+    List<Book> findByClassNumberAndEnable(int classNumber, boolean enable);
+
+    List<Book> findByAuthorAndEnable(String author, boolean enable);
+
+    List<Book> findByAuthorAndClassNumberAndEnable(String author, int classNumber, boolean enable);
 }
