@@ -22,21 +22,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     private TokenAuthService tokenAuthService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(new StatelessAuthFilter(tokenAuthService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/v.1.0/pupils").access("hasRole('ROLE_ADMIN')")
                 .and()
-                .formLogin().loginPage("/login2").permitAll()
-                .and()
+//                .formLogin().loginPage("/login2").permitAll()
+//                .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
     }
-
-    @Autowired
-    private UserService userService;
 
     @Bean
     public PasswordEncoder bCryptPasswordEncoder(){
