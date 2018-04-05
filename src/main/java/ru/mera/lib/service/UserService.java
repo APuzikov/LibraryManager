@@ -2,6 +2,8 @@ package ru.mera.lib.service;
 
 import com.google.inject.internal.util.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,8 +20,10 @@ import ru.mera.lib.repository.UserRolesRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -36,15 +40,15 @@ public class UserService implements UserDetailsService{
     @PostConstruct
     public void init(){
 
-        if (roleRepository.findByName("user") == null) {
+        if (roleRepository.findByName("ROLE_USER") == null) {
             Role role = new Role();
-            role.setName("user");
+            role.setName("ROLE_USER");
             roleRepository.save(role);
         }
 
-        if (roleRepository.findByName("admin") == null) {
+        if (roleRepository.findByName("ROLE_ADMIN") == null) {
             Role role = new Role();
-            role.setName("admin");
+            role.setName("ROLE_ADMIN");
             roleRepository.save(role);
         }
 
@@ -61,70 +65,19 @@ public class UserService implements UserDetailsService{
             User savedUser = userRepository.save(user);
 
             userRoles.setUserId(savedUser.getId());
-            userRoles.setRoleId(1);
+            userRoles.setRoleId(2);
             userRolesRepository.save(userRoles);
 
-            user.setAuthorities(ImmutableList.of(roleRepository.findByName("admin")));
+            user.setAuthorities(ImmutableList.of(roleRepository.findByName("ROLE_ADMIN")));
         }
-    }
-
-    public OperationStatus saveUser(User user) {
-        try {
-            Assert.notNull(user, "User can't be null!");
-            Assert.hasText(user.getUsername(), "Name is empty!");
-            Assert.hasText(user.getPassword(), "Password is empty!");
-            List<Role> roles = new ArrayList<>();
-            roles.add(roleRepository.getOne(1));        //добавляем роль user
-            user.setAuthorities(roles);
-            userRepository.save(user);
-            return new OperationStatus(true,"User successfully saved!");
-        } catch (Exception e){
-            return new OperationStatus(false, "Can't save user: " + e.getMessage());
-        }
-    }
-
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
-    }
-
-    public OperationStatus removeUser(int id) {
-
-        Optional<User> opUser = userRepository.findById(id);
-        if (opUser.isPresent()) {
-            User user = opUser.get();
-            try {
-                userRepository.delete(user);
-                return new OperationStatus(true,"User successfully deleted!");
-            } catch (Exception e){
-                return new OperationStatus(false,"Can't delete user: " + e.getMessage());
-            }
-        }
-        return new OperationStatus(false,"This user in't exist!");
-    }
-
-    public User getOneUser(int id) {
-        Optional<User> opUser = userRepository.findById(id);
-        if (opUser.isPresent()) return opUser.get();
-        return null;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user =  userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found!"));
 
-//        List<UserRoles> userRoles = userRolesRepository.findByUserId(user.getId());
-//        List<Role> roles = new ArrayList<>();
-//
-//        for (UserRoles userRole : userRoles){
-//            Role role = roleRepository.getOne(userRole.getRoleId());
-//            roles.add(role);
-//        }
-//
-//        user.setAuthorities(roles);
-        return user;
-    }
-
-    public Optional<User> findById(int id){
-        return userRepository.findById(id);
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 }

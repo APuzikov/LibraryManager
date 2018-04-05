@@ -33,6 +33,14 @@ public class User implements UserDetails{
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> authorities;
 
+    public User() {}
+
+    public User(String username, String password, List<Role> authorities) {
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
     @Override
     public List<Role> getAuthorities() {
         return authorities;

@@ -45,7 +45,7 @@ public class BookController {
         return bookService.getAllAvailableBooks(pupilId);
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/{id}")
     public Book getOneBook(@PathVariable int id){
         return bookService.getOneBook(id);
     }

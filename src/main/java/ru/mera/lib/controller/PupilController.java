@@ -1,6 +1,7 @@
 package ru.mera.lib.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.OperationStatus;
 import ru.mera.lib.entity.Book;
@@ -12,6 +13,7 @@ import java.util.List;
 //@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v.1.0/pupils")
+//@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class PupilController {
 
     @Autowired
