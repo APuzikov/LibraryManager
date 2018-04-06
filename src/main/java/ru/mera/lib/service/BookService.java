@@ -1,6 +1,8 @@
 package ru.mera.lib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.mera.lib.OperationStatus;
@@ -11,6 +13,7 @@ import ru.mera.lib.entity.Book;
 import ru.mera.lib.repository.RecordCardRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +35,7 @@ public class BookService {
         return bookFromDB == null;
     }
 
-    public OperationStatus saveBook(Book book) {
+    public ResponseEntity saveBook(Book book) {
         if(bookNotExist(book)) {
             try {
                 Assert.notNull(book, "Book can't be null!");
@@ -42,14 +45,14 @@ public class BookService {
                 Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
                 book.setEnable(true);
                 bookRepository.save(book);
-                return new OperationStatus(true, "Book successfully saved!");
+                return new ResponseEntity( HttpStatus.OK);
             } catch (Exception e) {
-                return new OperationStatus(false, "Can't save book: " + e.getMessage());
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
-        } return new OperationStatus(false, "Book already exist!");
+        } return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    public OperationStatus updateBook(Book book){
+    public ResponseEntity updateBook(Book book){
         try {
             Assert.notNull(book, "Book can't be null!");
             Assert.hasText(book.getAuthor(), "Author is empty!");
@@ -57,9 +60,9 @@ public class BookService {
             Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
             Assert.isTrue(book.getCount() >= 0, "Count of books can't be less zero!");
             bookRepository.save(book);
-            return new OperationStatus(true, "Book successfully updated!");
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
-            return new OperationStatus(false, "Can't update book: " + e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -128,48 +131,27 @@ public class BookService {
 
     public List<Book> findBooks(String title, String author, Integer classNumber){
 
-        if (classNumber == null &&
-                author == null &&
-                title != null){
-            return bookRepository.findByTitleAndEnable(title, true);
+        if (classNumber != 0) {
+            return bookRepository.findByTitleLikeAndAuthorLikeAndClassNumberAndEnable(title, author, classNumber, true);
         }
 
-        if (classNumber == null &&
-                author != null &&
-                title != null) {
-            return bookRepository.findByTitleAndAuthorAndEnable(title, author,true);
-        }
+        return bookRepository.findByTitleLikeAndAuthorLikeAndEnable(title, author, true);
 
-        if (classNumber != null &&
-                author != null &&
-                title != null) {
-            return bookRepository.findByTitleAndAuthorAndClassNumberAndEnable(title, author, classNumber,true);
-        }
 
-        if (classNumber != null &&
-                author == null &&
-                title != null) {
-            return bookRepository.findByTitleAndClassNumberAndEnable(title, classNumber,true);
-        }
 
-        if (classNumber != null &&
-                author == null &&
-                title == null) {
-            return bookRepository.findByClassNumberAndEnable(classNumber,true);
-        }
+//        if (title != null && author != null){
+//            return bookRepository.findByTitleLikeAndAuthorLikeAndEnable(title, author, true);
+//        }
+//
+//        if(title != null && classNumber != null){
+//            return bookRepository.findByTitleLikeAndClassNumberAndEnable(title, classNumber, true);
+//        }
+//
+//        if (title != null){
+//            return bookRepository.findByTitleLikeAndEnable(title, true);
+//        }
+//        return Collections.emptyList();
 
-        if (classNumber == null &&
-                author != null &&
-                title == null) {
-            return bookRepository.findByAuthorAndEnable(author, true);
-        }
-
-        if (classNumber != null &&
-                author != null &&
-                title == null) {
-            return bookRepository.findByAuthorAndClassNumberAndEnable(author, classNumber, true);
-        }
-
-        return null;
+//        return bookRepository.findByTitleLikeAndEnable(title, true);
     }
 }

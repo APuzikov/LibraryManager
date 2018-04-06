@@ -1,6 +1,8 @@
 package ru.mera.lib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.mera.lib.OperationStatus;
@@ -32,7 +34,7 @@ public class PupilService {
         return pupilFromDB == null;
     }
 
-    public OperationStatus savePupil(Pupil pupil){
+    public ResponseEntity savePupil(Pupil pupil){
         if (pupilNotExist(pupil)) {
             try {
                 Assert.notNull(pupil, "Pupil can't be null!");
@@ -41,24 +43,24 @@ public class PupilService {
 
                 pupil.setEnable(true);
                 pupilRepository.save(pupil);
-                return new OperationStatus(true, "Pupil saved successfully!");
+                return new ResponseEntity(HttpStatus.OK);
             } catch (Exception e) {
-                return new OperationStatus(false, "Can't save pupil: " + e.getMessage());
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         }
-        return new OperationStatus(false, "Pupil already exist!");
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    public OperationStatus updatePupil(Pupil pupil){
+    public ResponseEntity updatePupil(Pupil pupil){
         try {
             Assert.notNull(pupil, "Pupil can't be null!");
             Assert.hasText(pupil.getName(), "Name of pupil is empty!");
             Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
 
             pupilRepository.save(pupil);
-            return new OperationStatus(true, "Pupil updated successfully!");
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
-            return new OperationStatus(false, "Can't update pupil: " + e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -163,4 +165,15 @@ public class PupilService {
 
         return null;
     }
+
+    public ResponseEntity removePupil(int id) {
+        Optional<Pupil> pupil = pupilRepository.findById(id);
+        try {
+            pupil.ifPresent(p -> pupilRepository.delete(p));
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package ru.mera.lib.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.mera.lib.entity.Book;
 
@@ -13,17 +14,11 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     List<Book> findByEnable(boolean enable);
 
-    List<Book> findByTitleAndEnable(String title, boolean enable);
+    List<Book> findByTitleLikeAndEnable(String title, boolean enable);
 
-    List<Book> findByTitleAndAuthorAndEnable(String title, String author, boolean enable);
+    List<Book> findByTitleLikeAndAuthorLikeAndEnable(String title, String author, boolean enable);
 
-    List<Book> findByTitleAndAuthorAndClassNumberAndEnable(String title, String author, int classNumber, boolean enable);
+    List<Book> findByTitleLikeAndAuthorLikeAndClassNumberAndEnable(String title, String author, Integer classNumber, boolean enable);
 
-    List<Book> findByTitleAndClassNumberAndEnable(String title, int classNumber, boolean enable);
-
-    List<Book> findByClassNumberAndEnable(int classNumber, boolean enable);
-
-    List<Book> findByAuthorAndEnable(String author, boolean enable);
-
-    List<Book> findByAuthorAndClassNumberAndEnable(String author, int classNumber, boolean enable);
+    List<Book> findByTitleLikeAndClassNumberAndEnable(String title, Integer classNumber, boolean enable);
 }
