@@ -15,6 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
+import static ru.mera.lib.config.SecurityConstants.EXPIRATION_TIME;
+import static ru.mera.lib.config.SecurityConstants.HEADER_STRING;
+import static ru.mera.lib.config.SecurityConstants.TOKEN_PREFIX;
+import static ru.mera.lib.config.SecurityConstants.SECRET;
+
+//import static ru.mera.lib.config.SecurityConstants.*;
+
 @RestController
 public class LoginController {
 
@@ -25,18 +32,20 @@ public class LoginController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
         @PostMapping("/login")
-        public ResponseEntity<Object> login(@RequestBody LoginForm loginForm, HttpServletResponse response) throws IOException {
+        public ResponseEntity login(@RequestBody LoginForm loginForm, HttpServletResponse response) throws IOException {
 
             User user = userRepository.findByUsername(loginForm.getUsername());
 
             if (user != null && bCryptPasswordEncoder.matches(loginForm.getPassword(), user.getPassword())) {
-                String token = Jwts.builder().setSubject(loginForm.getUsername()).claim("roles", user.getRoles()).setIssuedAt(new Date())
-                        .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
-                response.addHeader("Authorization", "Bearer " + token);
-                return new ResponseEntity<>( HttpStatus.OK);
+                String token = Jwts.builder()
+                        .setSubject(loginForm.getUsername())
+                        .claim("roles", user.getRoles())//.setIssuedAt(new Date())
+                        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                        .signWith(SignatureAlgorithm.HS256, SECRET).compact();
+                response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+                return new ResponseEntity( HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-
         }
 }

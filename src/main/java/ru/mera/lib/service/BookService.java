@@ -71,9 +71,7 @@ public class BookService {
     }
 
     public Book getOneBook(int id) {
-        Optional<Book> opBook = bookRepository.findById(id);
-        if (opBook.isPresent()) return opBook.get();
-        return null;
+        return bookRepository.findById(id).orElse(null);
     }
 
     public OperationStatus removeBook(int id) {
@@ -99,28 +97,6 @@ public class BookService {
         return (int)bookRepository.count();
     }
 
-    public OperationStatus activateBook(int id) {
-        Optional<Book> opBook = bookRepository.findById(id);
-        if (opBook.isPresent()){
-            Book book = opBook.get();
-            book.setEnable(true);
-            bookRepository.save(book);
-            return new OperationStatus(true, "Book successfully activated!");
-        }
-        return new OperationStatus(false, "This book isn't exist!");
-    }
-
-    public OperationStatus deactivateBook(int id) {
-        Optional<Book> opBook = bookRepository.findById(id);
-        if (opBook.isPresent()){
-            Book book = opBook.get();
-            book.setEnable(false);
-            bookRepository.save(book);
-            return new OperationStatus(true, "Book is inactive!");
-        }
-        return new OperationStatus(false, "This book isn't exist!");
-    }
-
     public List<Book> getAllAvailableBooks(int pupilId) {
         List<Book> books = bookRepository.findByEnable(true);
 
@@ -136,22 +112,5 @@ public class BookService {
         }
 
         return bookRepository.findByTitleLikeAndAuthorLikeAndEnable(title, author, true);
-
-
-
-//        if (title != null && author != null){
-//            return bookRepository.findByTitleLikeAndAuthorLikeAndEnable(title, author, true);
-//        }
-//
-//        if(title != null && classNumber != null){
-//            return bookRepository.findByTitleLikeAndClassNumberAndEnable(title, classNumber, true);
-//        }
-//
-//        if (title != null){
-//            return bookRepository.findByTitleLikeAndEnable(title, true);
-//        }
-//        return Collections.emptyList();
-
-//        return bookRepository.findByTitleLikeAndEnable(title, true);
     }
 }

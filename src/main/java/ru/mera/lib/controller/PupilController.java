@@ -22,19 +22,12 @@ public class PupilController {
 
     @PutMapping
     public ResponseEntity updatePupil(@RequestBody Pupil pupil){
-        //pupil.setId(id);
         return pupilService.updatePupil(pupil);
     }
 
     @PostMapping("/findPupils")
     public List<Pupil> findPupils(@RequestBody Pupil pupil){
         return pupilService.findPupils(pupil);
-    }
-
-    @GetMapping
-    public List<Pupil> getAllPupils(){
-
-        return pupilService.getAllPupils(true);
     }
 
     @GetMapping("/{id}")

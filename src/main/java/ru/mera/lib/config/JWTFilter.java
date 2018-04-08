@@ -1,8 +1,6 @@
 package ru.mera.lib.config;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,28 +18,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.mera.lib.config.SecurityConstants.*;
+
 public class JWTFilter extends GenericFilterBean {
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String AUTHORITIES_KEY = "roles";
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
-        String authHeader = request.getHeader(AUTHORIZATION_HEADER);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        String authHeader = request.getHeader(HEADER_STRING);
+        if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
             ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Authorization header.");
         } else {
             try {
-                String token = authHeader.substring(7);
-                Claims claims = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody();
+                String token = authHeader.substring(TOKEN_PREFIX.length());
+                Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
                 request.setAttribute("claims", claims);
                 SecurityContextHolder.getContext().setAuthentication(getAuthentication(claims));
                 filterChain.doFilter(req, res);
-            } catch (SignatureException e) {
-                ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+            } catch (JwtException e) {
+                ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token ---------------------");
             }
-
         }
     }
 
@@ -52,8 +49,6 @@ public class JWTFilter extends GenericFilterBean {
             authorities.add(new SimpleGrantedAuthority(role));
         }
         User principal = new User(claims.getSubject(), "", authorities);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                principal, "", authorities);
-        return usernamePasswordAuthenticationToken;
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 }

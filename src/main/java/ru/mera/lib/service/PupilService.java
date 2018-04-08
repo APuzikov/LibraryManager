@@ -121,47 +121,6 @@ public class PupilService {
     }
 
     public List<Pupil> findPupils(Pupil pupil){
-        if (pupil.getClassNumber() == 0 &&
-                pupil.getClassName() == null &&
-                pupil.getName() != null){
-            return pupilRepository.findByNameAndEnable(pupil.getName(), true);
-        }
-
-        if (pupil.getClassNumber() == 0 &&
-                pupil.getClassName() != null &&
-                pupil.getName() != null){
-            return pupilRepository.findByNameAndClassNameAndEnable(pupil.getName(), pupil.getClassName(), true);
-        }
-
-        if (pupil.getClassNumber() != 0 &&
-                pupil.getClassName() != null &&
-                pupil.getName() == null){
-            return pupilRepository.findByClassNumberAndClassNameAndEnable(pupil.getClassNumber(), pupil.getClassName(), true);
-        }
-
-        if (pupil.getClassNumber() == 0 &&
-                pupil.getClassName() != null &&
-                pupil.getName() != null){
-            return pupilRepository.findByNameAndClassNameAndEnable(pupil.getName(), pupil.getClassName(),true);
-        }
-
-        if (pupil.getClassNumber() != 0 &&
-                pupil.getClassName() == null &&
-                pupil.getName() != null){
-            return pupilRepository.findByNameAndClassNumberAndEnable(pupil.getName(), pupil.getClassNumber(),true);
-        }
-
-        if (pupil.getClassNumber() != 0 &&
-                pupil.getClassName() == null &&
-                pupil.getName() == null){
-            return pupilRepository.findByClassNumberAndEnable(pupil.getClassNumber(), true);
-        }
-
-        if (pupil.getClassNumber() == 0 &&
-                pupil.getClassName() != null &&
-                pupil.getName() == null){
-            return pupilRepository.findByClassNameAndEnable(pupil.getClassName(), true);
-        }
 
         return null;
     }

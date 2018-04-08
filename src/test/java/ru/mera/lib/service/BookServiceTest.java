@@ -78,17 +78,17 @@ public class BookServiceTest {
         assertEquals(book.getPublishYear(), updatedBook.getPublishYear());
     }
 
-    @Test
-    public void activateBook() throws Exception {
-        bookService.activateBook(2);
-        Book book = bookRepository.getOne(2);
-        assertEquals(true, book.isEnable());
-    }
-
-    @Test
-    public void deactivateBook() throws Exception {
-        bookService.deactivateBook(2);
-        Book book = bookService.getOneBook(2);
-        assertEquals(false, book.isEnable());
-    }
+//    @Test
+//    public void activateBook() throws Exception {
+//        bookService.activateBook(2);
+//        Book book = bookRepository.getOne(2);
+//        assertEquals(true, book.isEnable());
+//    }
+//
+//    @Test
+//    public void deactivateBook() throws Exception {
+//        bookService.deactivateBook(2);
+//        Book book = bookService.getOneBook(2);
+//        assertEquals(false, book.isEnable());
+//    }
 }
