@@ -120,9 +120,18 @@ public class PupilService {
         return pupilRepository.findByEnable(true).size();
     }
 
-    public List<Pupil> findPupils(Pupil pupil){
 
-        return null;
+    public List<Pupil> findPupils(String name, Integer classNumber, String className){
+
+        if (className == null && classNumber == 0){
+            return pupilRepository.findByNameLikeAndEnable(name, true);
+        }
+
+        if (className == null){
+            return pupilRepository.findByNameLikeAndClassNumberAndEnable(name, classNumber, true);
+        }
+
+        return pupilRepository.findByNameLikeAndClassNameAndEnable(name, className, true);
     }
 
     public ResponseEntity removePupil(int id) {

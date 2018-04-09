@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.entity.Pupil;
+import ru.mera.lib.model.BookPagination;
+import ru.mera.lib.model.PupilPagination;
 import ru.mera.lib.service.PupilService;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -25,9 +28,35 @@ public class PupilController {
         return pupilService.updatePupil(pupil);
     }
 
-    @PostMapping("/findPupils")
-    public List<Pupil> findPupils(@RequestBody Pupil pupil){
-        return pupilService.findPupils(pupil);
+    @GetMapping("/search")
+    public PupilPagination findPupils(@RequestParam(required = false) String name,
+                                      @RequestParam(required = false) Integer classNumber,
+                                      @RequestParam(required = false) String className,
+                                      @RequestParam(required = false) Integer page){
+
+        if (name == null) name = "";
+        if (classNumber == null) classNumber = 0;
+//        if (className == null) className = "";
+        if (page == null) page = 1;
+
+        List<Pupil> pupils = pupilService.findPupils("%" + name + "%", classNumber, className);
+
+        int listSize = pupils.size();
+        int pageCount = listSize/10 + 1;
+        int lastIndex;
+
+        if (page > pageCount) return new PupilPagination(Collections.emptyList(), 1);
+
+        if (!pupils.isEmpty() && listSize > 10) {
+            int firstIndex = (page - 1) * 10;
+
+            if (listSize > (page - 1) * 10 + 10) {
+                lastIndex = (page - 1) * 10 + 10;
+            } else lastIndex = (page - 1) * 10 + listSize % 10;
+            return new PupilPagination(pupils.subList(firstIndex, lastIndex), pageCount);
+
+        } else return new PupilPagination(pupils, pageCount);
+
     }
 
     @GetMapping("/{id}")
@@ -51,8 +80,4 @@ public class PupilController {
         return pupilService.getPupilCount();
     }
 
-//    @GetMapping("/getAllDisabledPupil")
-//    public List<Pupil> getAllDisabledPupils(){
-//        return pupilService.getAllPupils(false);
-//    }
 }

@@ -44,6 +44,7 @@ public class BookController {
         if (page == null) page = 1;
 
         List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber);
+
         int listSize = books.size();
         int pageCount = listSize/10 + 1;
         int lastIndex;
@@ -56,8 +57,8 @@ public class BookController {
             if (listSize > (page - 1) * 10 + 10) {
                 lastIndex = (page - 1) * 10 + 10;
             } else lastIndex = (page - 1) * 10 + listSize % 10;
+            return new BookPagination(books.subList(firstIndex, lastIndex), pageCount);
 
-            return new BookPagination(books.subList(firstIndex, lastIndex), pageCount);//books.subList(firstIndex, lastIndex);
         } else return new BookPagination(books, pageCount);
     }
 
@@ -65,7 +66,7 @@ public class BookController {
     public Book getOneBook(@PathVariable int id){
         return bookService.getOneBook(id);
     }
-    
+
     @GetMapping("/count")
     public int getBookCount(){
         return bookService.getBookCount();
