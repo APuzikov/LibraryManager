@@ -3,9 +3,7 @@ package ru.mera.lib.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
-import ru.mera.lib.model.BookPagination;
 import ru.mera.lib.model.PupilPagination;
 import ru.mera.lib.service.PupilService;
 
@@ -30,7 +28,7 @@ public class PupilController {
         return pupilService.updatePupil(pupil);
     }
 
-    @GetMapping("/search")
+    @GetMapping
     public PupilPagination findPupils(@RequestParam(required = false) String name,
                                       @RequestParam(required = false) Integer classNumber,
                                       @RequestParam(required = false) String className,
