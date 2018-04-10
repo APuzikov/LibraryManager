@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 public class UserService {
 
@@ -20,9 +21,9 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
+//    public UserRepository getUserRepository() {
+//        return userRepository;
+//    }
 
     @PostConstruct
     public void init(){
@@ -32,16 +33,17 @@ public class UserService {
             admin.setUsername("trigger");
             admin.setPassword(bCryptPasswordEncoder.encode("1111"));
             List<String> roles = new ArrayList<>();
-            roles.add("USER");
             roles.add("ADMIN");
+            roles.add("USER");
             admin.setRoles(roles);
             userRepository.save(admin);
         }
     }
 
     public User create(User user) {
+        Assert.isTrue(userRepository.findByUsername(user.getUsername()) == null, "username already exist");
         Assert.notNull(user, "user is null");
-        Assert.hasText(user.getUsername(), "login is empty");
+        Assert.hasText(user.getUsername(), "username is empty");
         Assert.hasText(user.getPassword(), "password is empty");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);

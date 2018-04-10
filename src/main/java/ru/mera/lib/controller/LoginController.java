@@ -38,12 +38,13 @@ public class LoginController {
 
             if (user != null && bCryptPasswordEncoder.matches(loginForm.getPassword(), user.getPassword())) {
                 String token = Jwts.builder()
-                        .setSubject(loginForm.getUsername())
-                        .claim("roles", user.getRoles())//.setIssuedAt(new Date())
+                        .setSubject(user.getUsername())
+                        .claim("roles", user.getRoles()).setIssuedAt(new Date())
                         .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                         .signWith(SignatureAlgorithm.HS256, SECRET).compact();
                 response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
-                return new ResponseEntity( HttpStatus.OK);
+
+                return new ResponseEntity(HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }

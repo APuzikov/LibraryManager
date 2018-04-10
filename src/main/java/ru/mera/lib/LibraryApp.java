@@ -16,15 +16,4 @@ public class LibraryApp {
     public static void main(String[] args) {
         SpringApplication.run(LibraryApp.class, args);
     }
-
-//    @Bean
-//    public WebMvcConfigurer corseConfig(){
-//        return new WebMvcConfigurerAdapter() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:3000");
-//            }
-//        };
-//    }
 }

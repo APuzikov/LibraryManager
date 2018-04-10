@@ -2,6 +2,7 @@ package ru.mera.lib.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.model.BookPagination;
@@ -9,6 +10,7 @@ import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.service.BookService;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -32,8 +34,8 @@ public class BookController {
         return bookService.updateBook(book);
     }
 
-    @GetMapping("/search")
-    public BookPagination findBooks(@RequestParam(name = "title", required = false) String title ,
+    @GetMapping
+    public BookPagination findBooks(@RequestParam(name = "title", required = false) String title , //publishYear
                                 @RequestParam(name = "author", required = false) String author,
                                 @RequestParam(name = "classNumber", required = false) Integer classNumber,
                                 @RequestParam(name = "page", required = false) Integer page){
@@ -44,6 +46,8 @@ public class BookController {
         if (page == null) page = 1;
 
         List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber);
+
+        books.sort(Comparator.comparing(Book::getTitle));
 
         int listSize = books.size();
         int pageCount = listSize/10 + 1;

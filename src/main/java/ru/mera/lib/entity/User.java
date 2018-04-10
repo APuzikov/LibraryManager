@@ -1,7 +1,7 @@
 package ru.mera.lib.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -24,10 +23,10 @@ public class User implements UserDetails {
     private String username;
 
     @Column(name = "password")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @ElementCollection
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<String > roles = new ArrayList<>();
 
     public int getId() {
@@ -54,35 +53,35 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    @Transient
+   // @Transient
     @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;
     }
 
-    @Transient
+  //  @Transient
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Transient
+//    @Transient
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @Transient
+ //   @Transient
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Transient
+ //   @Transient
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

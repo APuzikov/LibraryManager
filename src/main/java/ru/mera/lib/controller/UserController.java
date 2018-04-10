@@ -3,12 +3,13 @@ package ru.mera.lib.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.entity.User;
 import ru.mera.lib.repository.UserRepository;
 import ru.mera.lib.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,18 +23,33 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody User user){
+    public ResponseEntity createUser(@RequestBody User user, HttpServletResponse response) throws IOException {
 
-        try{
+        try {
             List<String> roles = new ArrayList<>();
             roles.add("USER");
             user.setRoles(roles);
             userService.create(user);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "username already exist");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping
+    public ResponseEntity deleteUser(@RequestParam int userId, HttpServletResponse response) throws IOException {
+
+        try {
+            userRepository.findById(userId).ifPresent(user -> userRepository.delete(user));
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "user not found");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 }

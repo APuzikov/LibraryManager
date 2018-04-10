@@ -63,18 +63,18 @@ public class PupilServiceTest {
         assertEquals(enable, updatedPupil.isEnable());
     }
 
-    @Test
-    public void activatePupil() throws Exception {
-        pupilService.activatePupil(21);
-        Pupil pupil = pupilService.getOnePupil(21);
-        assertEquals(true, pupil.isEnable());
-    }
-
-    @Test
-    public void deactivatePupil() throws Exception {
-        pupilService.deactivatePupil(21);
-        Pupil pupil = pupilService.getOnePupil(21);
-        assertEquals(false, pupil.isEnable());
-    }
+//    @Test
+//    public void activatePupil() throws Exception {
+//        pupilService.activatePupil(21);
+//        Pupil pupil = pupilService.getOnePupil(21);
+//        assertEquals(true, pupil.isEnable());
+//    }
+//
+//    @Test
+//    public void deactivatePupil() throws Exception {
+//        pupilService.deactivatePupil(21);
+//        Pupil pupil = pupilService.getOnePupil(21);
+//        assertEquals(false, pupil.isEnable());
+//    }
 
 }

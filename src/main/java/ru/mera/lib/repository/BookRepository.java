@@ -14,11 +14,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     List<Book> findByEnable(boolean enable);
 
-    List<Book> findByTitleLikeAndEnable(String title, boolean enable);
-
     List<Book> findByTitleLikeAndAuthorLikeAndEnable(String title, String author, boolean enable);
 
     List<Book> findByTitleLikeAndAuthorLikeAndClassNumberAndEnable(String title, String author, Integer classNumber, boolean enable);
-
-    List<Book> findByTitleLikeAndClassNumberAndEnable(String title, Integer classNumber, boolean enable);
 }

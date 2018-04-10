@@ -1,6 +1,6 @@
 package ru.mera.lib.config;
 
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -8,12 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configurable
+@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    // This method is for overriding some configuration of the WebSecurity
-    // If you want to ignore some request or request patterns then you can
-    // specify that inside this method
+
     @Override
     public void configure(WebSecurity web) throws Exception {
 
@@ -28,8 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // starts authorizing configurations
                 .authorizeRequests()
+                .antMatchers("/api/v.1.0/user").hasAuthority("ADMIN")
                 // authenticate all remaining URLS
-                .anyRequest().fullyAuthenticated().and()
+                .anyRequest().authenticated()
+                .and()
                 // adding JWT filter
                 .addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class)
                 // enabling the basic authentication

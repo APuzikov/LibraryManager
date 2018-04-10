@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import ru.mera.lib.OperationStatus;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.entity.RecordCard;
 import ru.mera.lib.repository.BookRepository;
@@ -13,9 +12,7 @@ import ru.mera.lib.entity.Book;
 import ru.mera.lib.repository.RecordCardRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +42,7 @@ public class BookService {
                 Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
                 book.setEnable(true);
                 bookRepository.save(book);
-                return new ResponseEntity( HttpStatus.OK);
+                return new ResponseEntity(HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
@@ -74,15 +71,15 @@ public class BookService {
         return bookRepository.findById(id).orElse(null);
     }
 
-    public OperationStatus removeBook(int id) {
-        Optional<Book> opBook = bookRepository.findById(id);
-        if (opBook.isPresent()) {
-            Book book = opBook.get();
-            bookRepository.delete(book);
-            return new OperationStatus(true,"Book successfully deleted!");
-        }
-        return new OperationStatus(false, "This book in't exist!");
-    }
+//    public OperationStatus removeBook(int id) {
+//        Optional<Book> opBook = bookRepository.findById(id);
+//        if (opBook.isPresent()) {
+//            Book book = opBook.get();
+//            bookRepository.delete(book);
+//            return new OperationStatus(true,"Book successfully deleted!");
+//        }
+//        return new OperationStatus(false, "This book in't exist!");
+//    }
 
     public List<Pupil> getBookPupils(int id) {
         List<Pupil> pupils = new ArrayList<>();

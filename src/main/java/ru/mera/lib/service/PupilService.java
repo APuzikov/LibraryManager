@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import ru.mera.lib.OperationStatus;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.entity.RecordCard;
@@ -70,9 +69,7 @@ public class PupilService {
     }
 
     public Pupil getOnePupil(int id) {
-        Optional<Pupil> opPupil = pupilRepository.findById(id);
-        if (opPupil.isPresent()) return opPupil.get();
-        return null;
+        return pupilRepository.findById(id).orElse(null);
     }
 
 //    public OperationStatus removePupil(int id){
@@ -85,27 +82,27 @@ public class PupilService {
 //        return new OperationStatus(false, "This pupil isn't exist!");
 //    }
 
-    public OperationStatus activatePupil(int id){
-        Optional<Pupil> opPupil = pupilRepository.findById(id);
-        if (opPupil.isPresent()) {
-            Pupil pupil = opPupil.get();
-            pupil.setEnable(true);
-            pupilRepository.save(pupil);
-            return new OperationStatus(true, "Pupil successfully activated!");
-        }
-        return new OperationStatus(false, "This pupil isn't exist!");
-    }
-
-    public OperationStatus deactivatePupil(int id){
-        Optional<Pupil> opPupil = pupilRepository.findById(id);
-        if (opPupil.isPresent()) {
-            Pupil pupil = opPupil.get();
-            pupil.setEnable(false);
-            pupilRepository.save(pupil);
-            return new OperationStatus(true, "Pupil is inactive!");
-        }
-        return new OperationStatus(false, "This pupil isn't exist!");
-    }
+//    public OperationStatus activatePupil(int id){
+//        Optional<Pupil> opPupil = pupilRepository.findById(id);
+//        if (opPupil.isPresent()) {
+//            Pupil pupil = opPupil.get();
+//            pupil.setEnable(true);
+//            pupilRepository.save(pupil);
+//            return new OperationStatus(true, "Pupil successfully activated!");
+//        }
+//        return new OperationStatus(false, "This pupil isn't exist!");
+//    }
+//
+//    public OperationStatus deactivatePupil(int id){
+//        Optional<Pupil> opPupil = pupilRepository.findById(id);
+//        if (opPupil.isPresent()) {
+//            Pupil pupil = opPupil.get();
+//            pupil.setEnable(false);
+//            pupilRepository.save(pupil);
+//            return new OperationStatus(true, "Pupil is inactive!");
+//        }
+//        return new OperationStatus(false, "This pupil isn't exist!");
+//    }
 
     public List<Book> getPupilBooks(int id) {
         List<Book> books = new ArrayList<>();

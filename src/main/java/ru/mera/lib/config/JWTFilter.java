@@ -37,14 +37,15 @@ public class JWTFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(getAuthentication(claims));
                 filterChain.doFilter(req, res);
             } catch (JwtException e) {
-                ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token ---------------------");
+                ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
             }
         }
     }
 
-    public Authentication getAuthentication(Claims claims) {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+    private Authentication getAuthentication(Claims claims) {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         List<String> roles = (List<String>) claims.get(AUTHORITIES_KEY);
+
         for (String role : roles) {
             authorities.add(new SimpleGrantedAuthority(role));
         }
