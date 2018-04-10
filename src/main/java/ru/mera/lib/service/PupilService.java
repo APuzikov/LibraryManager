@@ -28,7 +28,7 @@ public class PupilService {
     private BookService bookService;
 
     private boolean pupilNotExist(Pupil pupil){
-        Pupil pupilFromDB = pupilRepository.findByNameAndClassNumberAndClassName(pupil.getName(),
+        Pupil pupilFromDB = pupilRepository.findByNameIgnoreCaseAndClassNumberAndClassNameIgnoreCase(pupil.getName(),
                 pupil.getClassNumber(), pupil.getClassName());
         return pupilFromDB == null;
     }
@@ -121,14 +121,14 @@ public class PupilService {
     public List<Pupil> findPupils(String name, Integer classNumber, String className){
 
         if (className == null && classNumber == 0){
-            return pupilRepository.findByNameLikeAndEnable(name, true);
+            return pupilRepository.findByNameIgnoreCaseLikeAndEnable(name, true);
         }
 
         if (className == null){
-            return pupilRepository.findByNameLikeAndClassNumberAndEnable(name, classNumber, true);
+            return pupilRepository.findByNameIgnoreCaseLikeAndClassNumberAndEnable(name, classNumber, true);
         }
 
-        return pupilRepository.findByNameLikeAndClassNameAndEnable(name, className, true);
+        return pupilRepository.findByNameIgnoreCaseLikeAndClassNameIgnoreCaseAndEnable(name, className, true);
     }
 
     public ResponseEntity removePupil(int id) {

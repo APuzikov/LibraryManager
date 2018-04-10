@@ -10,13 +10,11 @@ import java.util.List;
 public interface PupilRepository extends JpaRepository<Pupil, Integer>{
     List<Pupil> findByEnable(boolean enable);
 
-    Pupil findByNameAndClassNumberAndClassName(String name, int classNumber, String classname);
+    Pupil findByNameIgnoreCaseAndClassNumberAndClassNameIgnoreCase(String name, int classNumber, String classname);
 
-    List<Pupil> findByNameLikeAndClassNameAndClassNumberAndEnable(String name, String className, Integer classNumber, boolean enable);
+    List<Pupil> findByNameIgnoreCaseLikeAndClassNumberAndEnable(String name, Integer classNumber, boolean enable);
 
-    List<Pupil> findByNameLikeAndClassNumberAndEnable(String name, Integer classNumber, boolean enable);
+    List<Pupil> findByNameIgnoreCaseLikeAndClassNameIgnoreCaseAndEnable(String name, String className, boolean enable);
 
-    List<Pupil> findByNameLikeAndClassNameAndEnable(String name, String className, boolean enable);
-
-    List<Pupil> findByNameLikeAndEnable(String name, boolean enable);
+    List<Pupil> findByNameIgnoreCaseLikeAndEnable(String name, boolean enable);
 }

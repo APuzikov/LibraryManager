@@ -27,7 +27,7 @@ public class BookService {
     private PupilService pupilService;
 
     private boolean bookNotExist(Book book){
-        Book bookFromDB = bookRepository.findByTitleAndAuthorAndPublishYearAndClassNumber(book.getTitle(),
+        Book bookFromDB = bookRepository.findByTitleIgnoreCaseAndAuthorIgnoreCaseAndPublishYearAndClassNumber(book.getTitle(),
                 book.getAuthor(), book.getPublishYear(), book.getClassNumber());
         return bookFromDB == null;
     }
@@ -105,9 +105,9 @@ public class BookService {
     public List<Book> findBooks(String title, String author, Integer classNumber){
 
         if (classNumber != 0) {
-            return bookRepository.findByTitleLikeAndAuthorLikeAndClassNumberAndEnable(title, author, classNumber, true);
+            return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumberAndEnable(title, author, classNumber, true);
         }
 
-        return bookRepository.findByTitleLikeAndAuthorLikeAndEnable(title, author, true);
+        return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndEnable(title, author, true);
     }
 }

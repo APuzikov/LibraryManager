@@ -34,7 +34,7 @@ public class PupilServiceTest {
         pupil.setEnable(enable);
         pupilService.savePupil(pupil);
 
-        Pupil savedPupil = pupilRepository.findByNameAndClassNumberAndClassName(name, classNumber, className);
+        Pupil savedPupil = pupilRepository.findByNameIgnoreCaseAndClassNumberAndClassNameIgnoreCase(name, classNumber, className);
 
         assertEquals(name, savedPupil.getName());
         assertEquals(classNumber, savedPupil.getClassNumber());
