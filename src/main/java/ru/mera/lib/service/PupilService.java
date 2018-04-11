@@ -33,40 +33,27 @@ public class PupilService {
         return pupilFromDB == null;
     }
 
-    public ResponseEntity savePupil(Pupil pupil){
-        if (pupilNotExist(pupil)) {
-            try {
+    public void savePupil(Pupil pupil){
+
+                Assert.isTrue(pupilNotExist(pupil), "This pupil is already exist!");
                 Assert.notNull(pupil, "Pupil can't be null!");
                 Assert.hasText(pupil.getName(), "Name of pupil is empty!");
                 Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
-
-                pupil.setEnable(true);
                 pupilRepository.save(pupil);
-                return new ResponseEntity(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
-        }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity updatePupil(Pupil pupil){
-        try {
+    public void updatePupil(Pupil pupil){
             Assert.notNull(pupil, "Pupil can't be null!");
             Assert.hasText(pupil.getName(), "Name of pupil is empty!");
             Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
 
             pupilRepository.save(pupil);
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
     }
 
-    public List<Pupil> getAllPupils(boolean enable){
-        return pupilRepository.findByEnable(enable);
-        //return pupilRepository.findAll();
-    }
+//    public List<Pupil> getAllPupils(boolean enable){
+//        return pupilRepository.findByEnable(enable);
+//        //return pupilRepository.findAll();
+//    }
 
     public Pupil getOnePupil(int id) {
         return pupilRepository.findById(id).orElse(null);
@@ -121,14 +108,14 @@ public class PupilService {
     public List<Pupil> findPupils(String name, Integer classNumber, String className){
 
         if (className == null && classNumber == 0){
-            return pupilRepository.findByNameIgnoreCaseLikeAndEnable(name, true);
+            return pupilRepository.findByNameIgnoreCaseLike(name);
         }
 
         if (className == null){
-            return pupilRepository.findByNameIgnoreCaseLikeAndClassNumberAndEnable(name, classNumber, true);
+            return pupilRepository.findByNameIgnoreCaseLikeAndClassNumber(name, classNumber);
         }
 
-        return pupilRepository.findByNameIgnoreCaseLikeAndClassNameIgnoreCaseAndEnable(name, className, true);
+        return pupilRepository.findByNameIgnoreCaseLikeAndClassNameIgnoreCase(name, className);
     }
 
     public ResponseEntity removePupil(int id) {

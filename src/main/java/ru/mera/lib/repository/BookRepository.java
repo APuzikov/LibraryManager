@@ -13,7 +13,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     List<Book> findByEnable(boolean enable);
 
-    List<Book> findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndEnable(String title, String author, boolean enable);
+    List<Book> findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLike(String title, String author);
 
-    List<Book> findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumberAndEnable(String title, String author, Integer classNumber, boolean enable);
+    List<Book> findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumber(String title, String author, Integer classNumber);
 }

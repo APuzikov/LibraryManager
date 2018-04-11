@@ -51,5 +51,18 @@ public class UserController {
         }
     }
 
+    @PutMapping
+    public ResponseEntity updateUser(@RequestBody User user, HttpServletResponse response) throws IOException {
+
+        try{
+            userRepository.findById(user.getId()).ifPresent(user1 -> userRepository.delete(user1));
+            userRepository.save(user);
+            return new ResponseEntity(HttpStatus.OK);
+        }  catch (Exception e){
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "can't update user");
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

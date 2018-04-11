@@ -12,9 +12,9 @@ public interface PupilRepository extends JpaRepository<Pupil, Integer>{
 
     Pupil findByNameIgnoreCaseAndClassNumberAndClassNameIgnoreCase(String name, int classNumber, String classname);
 
-    List<Pupil> findByNameIgnoreCaseLikeAndClassNumberAndEnable(String name, Integer classNumber, boolean enable);
+    List<Pupil> findByNameIgnoreCaseLikeAndClassNumber(String name, Integer classNumber);
 
-    List<Pupil> findByNameIgnoreCaseLikeAndClassNameIgnoreCaseAndEnable(String name, String className, boolean enable);
+    List<Pupil> findByNameIgnoreCaseLikeAndClassNameIgnoreCase(String name, String className);
 
-    List<Pupil> findByNameIgnoreCaseLikeAndEnable(String name, boolean enable);
+    List<Pupil> findByNameIgnoreCaseLike(String name);
 }

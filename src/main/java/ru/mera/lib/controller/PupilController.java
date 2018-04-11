@@ -1,12 +1,15 @@
 package ru.mera.lib.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.model.PupilPagination;
 import ru.mera.lib.service.PupilService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -19,13 +22,26 @@ public class PupilController {
     private PupilService pupilService;
 
     @PostMapping
-    public ResponseEntity savePupil(@RequestBody Pupil pupil){
-        return pupilService.savePupil(pupil);
+    public ResponseEntity savePupil(@RequestBody Pupil pupil, HttpServletResponse response) throws IOException {
+
+        try {
+            pupilService.savePupil(pupil);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public ResponseEntity updatePupil(@RequestBody Pupil pupil){
-        return pupilService.updatePupil(pupil);
+    public ResponseEntity updatePupil(@RequestBody Pupil pupil, HttpServletResponse response) throws IOException {
+        try {
+            pupilService.updatePupil(pupil);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping

@@ -1,8 +1,6 @@
 package ru.mera.lib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.mera.lib.entity.Pupil;
@@ -32,9 +30,9 @@ public class BookService {
         return bookFromDB == null;
     }
 
-    public ResponseEntity saveBook(Book book) {
-        if(bookNotExist(book)) {
-            try {
+    public void saveBook(Book book) {
+
+                Assert.isTrue(bookNotExist(book), "This book is already exist!");
                 Assert.notNull(book, "Book can't be null!");
                 Assert.hasText(book.getAuthor(), "Author is empty!");
                 Assert.hasText(book.getTitle(), "Title is empty!");
@@ -42,25 +40,16 @@ public class BookService {
                 Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
                 book.setEnable(true);
                 bookRepository.save(book);
-                return new ResponseEntity(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity(HttpStatus.BAD_REQUEST);
-            }
-        } return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity updateBook(Book book){
-        try {
+    public void updateBook(Book book){
+
             Assert.notNull(book, "Book can't be null!");
             Assert.hasText(book.getAuthor(), "Author is empty!");
             Assert.hasText(book.getTitle(), "Title is empty!");
             Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
             Assert.isTrue(book.getCount() >= 0, "Count of books can't be less zero!");
             bookRepository.save(book);
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
     }
 
     public List<Book> getAllBooks(boolean enable) {
@@ -105,9 +94,9 @@ public class BookService {
     public List<Book> findBooks(String title, String author, Integer classNumber){
 
         if (classNumber != 0) {
-            return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumberAndEnable(title, author, classNumber, true);
+            return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumber(title, author, classNumber);
         }
 
-        return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndEnable(title, author, true);
+        return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLike(title, author);
     }
 }

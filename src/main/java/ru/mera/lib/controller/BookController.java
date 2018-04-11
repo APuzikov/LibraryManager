@@ -1,6 +1,7 @@
 package ru.mera.lib.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,8 @@ import ru.mera.lib.model.BookPagination;
 import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.service.BookService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,14 +27,26 @@ public class BookController {
     private BookRepository bookRepository;
 
     @PostMapping
-    public ResponseEntity saveBook(@RequestBody Book book){
-        return bookService.saveBook(book);
+    public ResponseEntity saveBook(@RequestBody Book book, HttpServletResponse response) throws IOException {
+        try {
+            bookService.saveBook(book);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateBook(@RequestBody Book book, @PathVariable int id){
-        book.setId(id);
-        return bookService.updateBook(book);
+    @PutMapping
+    public ResponseEntity updateBook(@RequestBody Book book, HttpServletResponse response) throws IOException {
+
+        try {
+            bookService.updateBook(book);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping
