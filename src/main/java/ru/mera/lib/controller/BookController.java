@@ -81,6 +81,17 @@ public class BookController {
         } else return new BookPagination(books, pageCount);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteBook(@PathVariable int id, HttpServletResponse response) throws IOException {
+        try {
+            bookService.deleteBook(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/{id}")
     public Book getOneBook(@PathVariable int id){
         return bookService.getOneBook(id);

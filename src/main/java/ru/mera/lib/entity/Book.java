@@ -32,7 +32,7 @@ public class Book {
     private boolean enable;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "record_cards", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     private List<Pupil> pupils;

@@ -11,6 +11,7 @@ import ru.mera.lib.repository.RecordCardRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,23 +53,20 @@ public class BookService {
             bookRepository.save(book);
     }
 
-    public List<Book> getAllBooks(boolean enable) {
-        return bookRepository.findByEnable(enable);
-    }
-
     public Book getOneBook(int id) {
         return bookRepository.findById(id).orElse(null);
     }
 
-//    public OperationStatus removeBook(int id) {
-//        Optional<Book> opBook = bookRepository.findById(id);
-//        if (opBook.isPresent()) {
-//            Book book = opBook.get();
-//            bookRepository.delete(book);
-//            return new OperationStatus(true,"Book successfully deleted!");
-//        }
-//        return new OperationStatus(false, "This book in't exist!");
-//    }
+    public void deleteBook(int id) {
+        Optional<Book> opBook = bookRepository.findById(id);
+
+        if (opBook.isPresent()){
+            Book book = opBook.get();
+            List<RecordCard> recordCards = recordCardRepository.findByBookIdAndReturnDate(book.getId(), null);
+            Assert.isTrue(recordCards.isEmpty(), "This book is not returned!");
+            bookRepository.delete(book);
+        } else throw new IllegalArgumentException("This book is not present in library!");
+    }
 
     public List<Pupil> getBookPupils(int id) {
         List<Pupil> pupils = new ArrayList<>();

@@ -128,4 +128,14 @@ public class PupilService {
         }
     }
 
+    public void deletePupil(int id) {
+        Optional<Pupil> opPupil = pupilRepository.findById(id);
+
+        if (opPupil.isPresent()){
+            Pupil pupil = opPupil.get();
+            List<RecordCard> recordCards = recordCardRepository.findByPupilIdAndReturnDate(pupil.getId(), null);
+            Assert.isTrue(recordCards.isEmpty(), "This pupil did not return the book!");
+            pupilRepository.delete(pupil);
+        } else throw new IllegalArgumentException("This pupil is not exist!");
+    }
 }

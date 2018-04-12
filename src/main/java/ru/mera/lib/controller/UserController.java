@@ -1,17 +1,24 @@
 package ru.mera.lib.controller;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.entity.User;
+import ru.mera.lib.model.RoleModel;
 import ru.mera.lib.repository.UserRepository;
 import ru.mera.lib.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.mera.lib.config.SecurityConstants.*;
 
 @RestController
 @RequestMapping("/api/v.1.0/user")
@@ -64,5 +71,24 @@ public class UserController {
         }
     }
 
+    @GetMapping("/authorization")
+    public RoleModel authorization(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+        String authHeader = request.getHeader(HEADER_STRING);
+
+        if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Authorization header.");
+            return null;
+        } else {
+            try {
+                String token = authHeader.substring(TOKEN_PREFIX.length());
+                Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+                List<String> roles = (List<String>) claims.get(AUTHORITIES_KEY);
+                return new RoleModel(roles);
+            } catch (JwtException e){
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
+                return null;
+            }
+        }
+    }
 }

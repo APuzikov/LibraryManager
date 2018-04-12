@@ -27,7 +27,7 @@ public class Pupil {
     private boolean enable;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "pupils")
+    @ManyToMany(mappedBy = "pupils", cascade = CascadeType.ALL)
     private List<Book> books;
 
     public int getId() {

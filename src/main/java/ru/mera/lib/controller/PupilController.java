@@ -73,17 +73,21 @@ public class PupilController {
             return new PupilPagination(pupils.subList(firstIndex, lastIndex), pageCount);
 
         } else return new PupilPagination(pupils, pageCount);
-
-    }
-
-    @GetMapping("/{id}")
-    public Pupil getOnePupil (@PathVariable int id){
-        return pupilService.getOnePupil(id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity removePupil(@PathVariable int id){
-        return pupilService.removePupil(id);
+    public ResponseEntity deletePupil(@PathVariable int id, HttpServletResponse response) throws IOException {
+        try {
+            pupilService.deletePupil(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/{id}")
+    public Pupil getOnePupil (@PathVariable int id){
+        return pupilService.getOnePupil(id);
     }
 
     //      возвращает все книги выданные ученику
