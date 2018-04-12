@@ -32,7 +32,6 @@ public class BookService {
     }
 
     public void saveBook(Book book) {
-
                 Assert.isTrue(bookNotExist(book), "This book is already exist!");
                 Assert.notNull(book, "Book can't be null!");
                 Assert.hasText(book.getAuthor(), "Author is empty!");
@@ -44,7 +43,6 @@ public class BookService {
     }
 
     public void updateBook(Book book){
-
             Assert.notNull(book, "Book can't be null!");
             Assert.hasText(book.getAuthor(), "Author is empty!");
             Assert.hasText(book.getTitle(), "Title is empty!");
@@ -90,7 +88,6 @@ public class BookService {
     }
 
     public List<Book> findBooks(String title, String author, Integer classNumber){
-
         if (classNumber != 0) {
             return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumber(title, author, classNumber);
         }

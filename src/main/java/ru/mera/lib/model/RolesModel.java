@@ -2,10 +2,10 @@ package ru.mera.lib.model;
 
 import java.util.List;
 
-public class RoleModel {
+public class RolesModel {
     private List<String> roles;
 
-    public RoleModel(List<String> roles) {
+    public RolesModel(List<String> roles) {
         this.roles = roles;
     }
 

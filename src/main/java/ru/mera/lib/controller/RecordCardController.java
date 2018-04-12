@@ -18,7 +18,6 @@ public class RecordCardController {
 
     @PostMapping("/{bookId}/{pupilId}")
     public ResponseEntity giveBook(@PathVariable int bookId, @PathVariable int pupilId, HttpServletResponse response) throws IOException {
-
         try {
             recordCardService.giveBook(bookId, pupilId);
             return new ResponseEntity(HttpStatus.OK);
@@ -30,7 +29,6 @@ public class RecordCardController {
 
     @PutMapping("/{bookId}/{pupilId}")
     public ResponseEntity returnBook(@PathVariable int bookId, @PathVariable int pupilId, HttpServletResponse response) throws IOException {
-
         try {
             recordCardService.returnBook(bookId, pupilId);
             return new ResponseEntity(HttpStatus.OK);

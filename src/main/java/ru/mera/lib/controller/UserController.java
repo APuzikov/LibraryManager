@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.entity.User;
-import ru.mera.lib.model.RoleModel;
+import ru.mera.lib.model.RolesModel;
 import ru.mera.lib.repository.UserRepository;
 import ru.mera.lib.service.UserService;
 
@@ -30,7 +30,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity createUser(@RequestBody User user, HttpServletResponse response) throws IOException {
 
@@ -72,7 +71,7 @@ public class UserController {
     }
 
     @GetMapping("/authorization")
-    public RoleModel authorization(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public RolesModel authorization(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String authHeader = request.getHeader(HEADER_STRING);
 
@@ -84,7 +83,7 @@ public class UserController {
                 String token = authHeader.substring(TOKEN_PREFIX.length());
                 Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
                 List<String> roles = (List<String>) claims.get(AUTHORITIES_KEY);
-                return new RoleModel(roles);
+                return new RolesModel(roles);
             } catch (JwtException e){
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
                 return null;

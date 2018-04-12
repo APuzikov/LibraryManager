@@ -3,7 +3,6 @@ package ru.mera.lib.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.model.BookPagination;
@@ -39,7 +38,6 @@ public class BookController {
 
     @PutMapping
     public ResponseEntity updateBook(@RequestBody Book book, HttpServletResponse response) throws IOException {
-
         try {
             bookService.updateBook(book);
             return new ResponseEntity(HttpStatus.OK);

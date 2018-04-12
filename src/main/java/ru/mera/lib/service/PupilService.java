@@ -34,7 +34,6 @@ public class PupilService {
     }
 
     public void savePupil(Pupil pupil){
-
                 Assert.isTrue(pupilNotExist(pupil), "This pupil is already exist!");
                 Assert.notNull(pupil, "Pupil can't be null!");
                 Assert.hasText(pupil.getName(), "Name of pupil is empty!");
@@ -59,38 +58,6 @@ public class PupilService {
         return pupilRepository.findById(id).orElse(null);
     }
 
-//    public OperationStatus removePupil(int id){
-//        Optional<Pupil> opPupil = pupilRepository.findById(id);
-//        if (opPupil.isPresent()){
-//            Pupil pupil = opPupil.get();
-//            pupilRepository.delete(pupil);
-//            return new OperationStatus(true,"Pupil successfully deleted!");
-//        }
-//        return new OperationStatus(false, "This pupil isn't exist!");
-//    }
-
-//    public OperationStatus activatePupil(int id){
-//        Optional<Pupil> opPupil = pupilRepository.findById(id);
-//        if (opPupil.isPresent()) {
-//            Pupil pupil = opPupil.get();
-//            pupil.setEnable(true);
-//            pupilRepository.save(pupil);
-//            return new OperationStatus(true, "Pupil successfully activated!");
-//        }
-//        return new OperationStatus(false, "This pupil isn't exist!");
-//    }
-//
-//    public OperationStatus deactivatePupil(int id){
-//        Optional<Pupil> opPupil = pupilRepository.findById(id);
-//        if (opPupil.isPresent()) {
-//            Pupil pupil = opPupil.get();
-//            pupil.setEnable(false);
-//            pupilRepository.save(pupil);
-//            return new OperationStatus(true, "Pupil is inactive!");
-//        }
-//        return new OperationStatus(false, "This pupil isn't exist!");
-//    }
-
     public List<Book> getPupilBooks(int id) {
         List<Book> books = new ArrayList<>();
         List<RecordCard> recordCards = recordCardRepository.findByPupilIdAndReturnDate(id, null);
@@ -106,7 +73,6 @@ public class PupilService {
 
 
     public List<Pupil> findPupils(String name, Integer classNumber, String className){
-
         if (className == null && classNumber == 0){
             return pupilRepository.findByNameIgnoreCaseLike(name);
         }

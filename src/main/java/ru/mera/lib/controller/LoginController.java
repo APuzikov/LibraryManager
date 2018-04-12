@@ -43,7 +43,6 @@ public class LoginController {
                         .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                         .signWith(SignatureAlgorithm.HS256, SECRET).compact();
                 response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
-
                 return new ResponseEntity(HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);

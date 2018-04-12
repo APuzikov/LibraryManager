@@ -21,10 +21,6 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-//    public UserRepository getUserRepository() {
-//        return userRepository;
-//    }
-
     @PostConstruct
     public void init(){
         User user = userRepository.findByUsername("trigger");
