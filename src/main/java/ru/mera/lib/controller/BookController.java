@@ -62,14 +62,7 @@ public class BookController {
         if (page == null) page = 1;
 
         List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber, publishYear);
-//        books.sort(Comparator.comparing(Book::getTitle));
-//        books.sort(Comparator.comparing(book -> book.getTitle().compareToIgnoreCase(book.getTitle())));
-
-        Collections.sort(books, new Comparator<Book>() {
-            public int compare(Book o1, Book o2) {
-                return o1.getTitle().compareToIgnoreCase(o2.getTitle());
-            }
-        });
+        books.sort((b1, b2) -> b1.getTitle().compareToIgnoreCase(b2.getTitle()));
 
         int totalItems = books.size();
         int listSize = books.size();

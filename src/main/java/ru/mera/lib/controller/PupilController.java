@@ -55,24 +55,28 @@ public class PupilController {
         if (page == null) page = 1;
 
         List<Pupil> pupils = pupilService.findPupils("%" + name + "%", classNumber, className);
+        pupils.sort((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));//   сортировка по-имени
 
-        pupils.sort(Comparator.comparing(Pupil::getName));//   сортировка по-имени
-
+        int totalItems = pupils.size();
         int listSize = pupils.size();
-        int pageCount = listSize/10 + 1;
+        int pageCount;
         int lastIndex;
 
-        if (page > pageCount) return new PupilPagination(Collections.emptyList(), 1);
+        if (listSize%10 == 0){
+            pageCount = listSize/10;
+        } else pageCount = listSize/10 + 1;
+
+        if (page > pageCount) return new PupilPagination(Collections.emptyList(), 1, totalItems);
 
         if (!pupils.isEmpty() && listSize > 10) {
             int firstIndex = (page - 1) * 10;
 
-            if (listSize > (page - 1) * 10 + 10) {
+            if (listSize >= (page - 1) * 10 + 10) {
                 lastIndex = (page - 1) * 10 + 10;
             } else lastIndex = (page - 1) * 10 + listSize % 10;
-            return new PupilPagination(pupils.subList(firstIndex, lastIndex), pageCount);
+            return new PupilPagination(pupils.subList(firstIndex, lastIndex), pageCount, totalItems);
 
-        } else return new PupilPagination(pupils, pageCount);
+        } else return new PupilPagination(pupils, pageCount,totalItems);
     }
 
     @DeleteMapping("/{id}")

@@ -8,10 +8,12 @@ public class PupilPagination {
 
     private List<Pupil> pupils;
     private int pageCount;
+    private int totalItems;
 
-    public PupilPagination(List<Pupil> pupils, int pageCount) {
+    public PupilPagination(List<Pupil> pupils, int pageCount, int totalItems) {
         this.pupils = pupils;
         this.pageCount = pageCount;
+        this.totalItems = totalItems;
     }
 
     public List<Pupil> getPupils() {
@@ -28,5 +30,13 @@ public class PupilPagination {
 
     public void setPageCount(int pageCount) {
         this.pageCount = pageCount;
+    }
+
+    public int getTotalItems() {
+        return totalItems;
+    }
+
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
     }
 }
