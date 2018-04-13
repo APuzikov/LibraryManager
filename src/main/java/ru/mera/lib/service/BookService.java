@@ -36,8 +36,9 @@ public class BookService {
                 Assert.notNull(book, "Book can't be null!");
                 Assert.hasText(book.getAuthor(), "Author is empty!");
                 Assert.hasText(book.getTitle(), "Title is empty!");
-                Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
+                Assert.isTrue(book.getPublishYear() >= 0, "Invalid year of publication!");
                 Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
+                Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
                 book.setEnable(true);
                 bookRepository.save(book);
     }
@@ -46,8 +47,9 @@ public class BookService {
             Assert.notNull(book, "Book can't be null!");
             Assert.hasText(book.getAuthor(), "Author is empty!");
             Assert.hasText(book.getTitle(), "Title is empty!");
-            Assert.isTrue(book.getPublishYear() > 0, "Invalid year of publication!");
+            Assert.isTrue(book.getPublishYear() >= 0, "Invalid year of publication!");
             Assert.isTrue(book.getCount() >= 0, "Count of books can't be less zero!");
+            Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
             bookRepository.save(book);
     }
 

@@ -37,7 +37,7 @@ public class PupilService {
                 Assert.isTrue(pupilNotExist(pupil), "This pupil is already exist!");
                 Assert.notNull(pupil, "Pupil can't be null!");
                 Assert.hasText(pupil.getName(), "Name of pupil is empty!");
-                Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
+                Assert.isTrue(pupil.getClassNumber() >= 0, "Invalid class number!");
                 pupilRepository.save(pupil);
     }
 
