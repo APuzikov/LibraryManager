@@ -10,14 +10,6 @@ public class BookPagination {
     private int pageCount;
     private int totalItems;
 
-    public int getTotalItems() {
-        return totalItems;
-    }
-
-    public void setTotalItems(int totalItems) {
-        this.totalItems = totalItems;
-    }
-
     public BookPagination(List<Book> books, int pageCount, int totalItems) {
         this.books = books;
         this.pageCount = pageCount;
@@ -38,5 +30,13 @@ public class BookPagination {
 
     public void setPageCount(int pageCount) {
         this.pageCount = pageCount;
+    }
+
+    public int getTotalItems() {
+        return totalItems;
+    }
+
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
     }
 }

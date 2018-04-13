@@ -62,21 +62,30 @@ public class BookController {
         if (page == null) page = 1;
 
         List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber, publishYear);
+//        books.sort(Comparator.comparing(Book::getTitle));
+//        books.sort(Comparator.comparing(book -> book.getTitle().compareToIgnoreCase(book.getTitle())));
+
+        Collections.sort(books, new Comparator<Book>() {
+            public int compare(Book o1, Book o2) {
+                return o1.getTitle().compareToIgnoreCase(o2.getTitle());
+            }
+        });
 
         int totalItems = books.size();
-
-        books.sort(Comparator.comparing(Book::getTitle));
-
         int listSize = books.size();
-        int pageCount = listSize/10 + 1;
+        int pageCount;
         int lastIndex;
+
+        if (listSize%10 == 0){
+            pageCount = listSize/10;
+        } else pageCount = listSize/10 + 1;
 
         if (page > pageCount) return new BookPagination(Collections.emptyList(), 1, totalItems);
 
         if (!books.isEmpty() && listSize > 10) {
             int firstIndex = (page - 1) * 10;
 
-            if (listSize > (page - 1) * 10 + 10) {
+            if (listSize >= (page - 1) * 10 + 10) {
                 lastIndex = (page - 1) * 10 + 10;
             } else lastIndex = (page - 1) * 10 + listSize % 10;
             return new BookPagination(books.subList(firstIndex, lastIndex), pageCount, totalItems);
