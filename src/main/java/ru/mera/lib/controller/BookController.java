@@ -63,13 +63,15 @@ public class BookController {
 
         List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber, publishYear);
 
+        int totalItems = books.size();
+
         books.sort(Comparator.comparing(Book::getTitle));
 
         int listSize = books.size();
         int pageCount = listSize/10 + 1;
         int lastIndex;
 
-        if (page > pageCount) return new BookPagination(Collections.emptyList(), 1);
+        if (page > pageCount) return new BookPagination(Collections.emptyList(), 1, totalItems);
 
         if (!books.isEmpty() && listSize > 10) {
             int firstIndex = (page - 1) * 10;
@@ -77,9 +79,9 @@ public class BookController {
             if (listSize > (page - 1) * 10 + 10) {
                 lastIndex = (page - 1) * 10 + 10;
             } else lastIndex = (page - 1) * 10 + listSize % 10;
-            return new BookPagination(books.subList(firstIndex, lastIndex), pageCount);
+            return new BookPagination(books.subList(firstIndex, lastIndex), pageCount, totalItems);
 
-        } else return new BookPagination(books, pageCount);
+        } else return new BookPagination(books, pageCount, totalItems);
     }
 
     @DeleteMapping("/{id}")
