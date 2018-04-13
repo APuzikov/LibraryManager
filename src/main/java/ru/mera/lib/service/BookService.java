@@ -25,32 +25,21 @@ public class BookService {
     @Autowired
     private PupilService pupilService;
 
-    private boolean bookNotExist(Book book){
+    private boolean bookNotExist(Book book) {
         Book bookFromDB = bookRepository.findByTitleIgnoreCaseAndAuthorIgnoreCaseAndPublishYearAndClassNumber(book.getTitle(),
                 book.getAuthor(), book.getPublishYear(), book.getClassNumber());
         return bookFromDB == null;
     }
 
     public void saveBook(Book book) {
-                Assert.isTrue(bookNotExist(book), "This book is already exist!");
-                Assert.notNull(book, "Book can't be null!");
-                Assert.hasText(book.getAuthor(), "Author is empty!");
-                Assert.hasText(book.getTitle(), "Title is empty!");
-                Assert.isTrue(book.getPublishYear() >= 0, "Invalid year of publication!");
-                Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
-                Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
-                book.setEnable(true);
-                bookRepository.save(book);
-    }
-
-    public void updateBook(Book book){
-            Assert.notNull(book, "Book can't be null!");
-            Assert.hasText(book.getAuthor(), "Author is empty!");
-            Assert.hasText(book.getTitle(), "Title is empty!");
-            Assert.isTrue(book.getPublishYear() >= 0, "Invalid year of publication!");
-            Assert.isTrue(book.getCount() >= 0, "Count of books can't be less zero!");
-            Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
-            bookRepository.save(book);
+        Assert.isTrue(bookNotExist(book), "This book is already exist!");
+        Assert.notNull(book, "Book can't be null!");
+        Assert.hasText(book.getAuthor(), "Author is empty!");
+        Assert.hasText(book.getTitle(), "Title is empty!");
+        Assert.isTrue(book.getPublishYear() >= 0, "Invalid year of publication!");
+        Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
+        Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
+        bookRepository.save(book);
     }
 
     public Book getOneBook(int id) {
@@ -60,7 +49,7 @@ public class BookService {
     public void deleteBook(int id) {
         Optional<Book> opBook = bookRepository.findById(id);
 
-        if (opBook.isPresent()){
+        if (opBook.isPresent()) {
             Book book = opBook.get();
             List<RecordCard> recordCards = recordCardRepository.findByBookIdAndReturnDate(book.getId(), null);
             Assert.isTrue(recordCards.isEmpty(), "This book is not returned!");
@@ -71,14 +60,14 @@ public class BookService {
     public List<Pupil> getBookPupils(int id) {
         List<Pupil> pupils = new ArrayList<>();
         List<RecordCard> recordCards = recordCardRepository.findByBookIdAndReturnDate(id, null);
-        for (RecordCard recordCard : recordCards){
+        for (RecordCard recordCard : recordCards) {
             pupils.add(pupilService.getOnePupil(recordCard.getPupilId()));
         }
         return pupils;
     }
 
     public int getBookCount() {
-        return (int)bookRepository.count();
+        return (int) bookRepository.count();
     }
 
     public List<Book> getAllAvailableBooks(int pupilId) {
@@ -89,15 +78,15 @@ public class BookService {
                 collect(Collectors.toList());
     }
 
-    public List<Book> findBooks(String title, String author, Integer classNumber, Integer publishYear){
-        if (classNumber != 0 && publishYear != 0){
+    public List<Book> findBooks(String title, String author, Integer classNumber, Integer publishYear) {
+        if (classNumber != 0 && publishYear != 0) {
             return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumberAndPublishYear(title, author, classNumber, publishYear);
         }
         if (classNumber != 0) {
             return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumber(title, author, classNumber);
         }
         if (publishYear != 0) {
-            return  bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndPublishYear(title, author, publishYear);
+            return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndPublishYear(title, author, publishYear);
         }
         return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLike(title, author);
     }

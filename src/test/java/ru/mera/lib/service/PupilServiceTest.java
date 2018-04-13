@@ -42,26 +42,26 @@ public class PupilServiceTest {
         assertEquals(enable, savedPupil.isEnable());
     }
 
-    @Test
-    public void updatePupil() throws Exception {
-        String name = "Updated pupil";
-        String className = "C";
-        int classNumber = 8;
-        boolean enable = true;
-        Pupil pupil = pupilService.getOnePupil(21);
-        pupil.setName(name);
-        pupil.setClassNumber(classNumber);
-        pupil.setClassName(className);
-        pupil.setEnable(enable);
-        pupilService.updatePupil(pupil);
-
-        Pupil updatedPupil = pupilRepository.getOne(21);
-
-        assertEquals(name, updatedPupil.getName());
-        assertEquals(classNumber, updatedPupil.getClassNumber());
-        assertEquals(className, updatedPupil.getClassName());
-        assertEquals(enable, updatedPupil.isEnable());
-    }
+//    @Test
+//    public void updatePupil() throws Exception {
+//        String name = "Updated pupil";
+//        String className = "C";
+//        int classNumber = 8;
+//        boolean enable = true;
+//        Pupil pupil = pupilService.getOnePupil(21);
+//        pupil.setName(name);
+//        pupil.setClassNumber(classNumber);
+//        pupil.setClassName(className);
+//        pupil.setEnable(enable);
+//        pupilService.updatePupil(pupil);
+//
+//        Pupil updatedPupil = pupilRepository.getOne(21);
+//
+//        assertEquals(name, updatedPupil.getName());
+//        assertEquals(classNumber, updatedPupil.getClassNumber());
+//        assertEquals(className, updatedPupil.getClassName());
+//        assertEquals(enable, updatedPupil.isEnable());
+//    }
 
 //    @Test
 //    public void activatePupil() throws Exception {

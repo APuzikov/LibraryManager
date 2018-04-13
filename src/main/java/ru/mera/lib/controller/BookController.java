@@ -12,7 +12,6 @@ import ru.mera.lib.service.BookService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -39,7 +38,7 @@ public class BookController {
     @PutMapping
     public ResponseEntity updateBook(@RequestBody Book book, HttpServletResponse response) throws IOException {
         try {
-            bookService.updateBook(book);
+            bookService.saveBook(book);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
@@ -53,7 +52,6 @@ public class BookController {
                                     @RequestParam(name = "classNumber", required = false) Integer classNumber,
                                     @RequestParam(name = "page", required = false) Integer page,
                                     @RequestParam(name = "publishYear", required = false) Integer publishYear){
-
 
         if (title == null) title = "";
         if (author == null) author = "";

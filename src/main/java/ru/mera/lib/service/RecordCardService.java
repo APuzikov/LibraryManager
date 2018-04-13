@@ -41,7 +41,7 @@ public class RecordCardService {
         recordCardRepository.save(recordCard);
 
         book.setCount(book.getCount() - 1);
-        bookService.updateBook(book);
+        bookService.saveBook(book);
 
     }
 
@@ -56,6 +56,6 @@ public class RecordCardService {
 
             Book book = bookService.getOneBook(bookId);
             book.setCount(book.getCount() + 1);
-            bookService.updateBook(book);
+            bookService.saveBook(book);
     }
 }

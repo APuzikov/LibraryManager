@@ -40,20 +40,7 @@ public class PupilService {
                 Assert.isTrue(pupil.getClassNumber() >= 0, "Invalid class number!");
                 pupilRepository.save(pupil);
     }
-
-    public void updatePupil(Pupil pupil){
-            Assert.notNull(pupil, "Pupil can't be null!");
-            Assert.hasText(pupil.getName(), "Name of pupil is empty!");
-            Assert.isTrue(pupil.getClassNumber() > 0, "Invalid class number!");
-
-            pupilRepository.save(pupil);
-    }
-
-//    public List<Pupil> getAllPupils(boolean enable){
-//        return pupilRepository.findByEnable(enable);
-//        //return pupilRepository.findAll();
-//    }
-
+    
     public Pupil getOnePupil(int id) {
         return pupilRepository.findById(id).orElse(null);
     }

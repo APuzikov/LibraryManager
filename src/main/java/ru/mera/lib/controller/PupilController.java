@@ -11,7 +11,6 @@ import ru.mera.lib.service.PupilService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -36,7 +35,7 @@ public class PupilController {
     @PutMapping
     public ResponseEntity updatePupil(@RequestBody Pupil pupil, HttpServletResponse response) throws IOException {
         try {
-            pupilService.updatePupil(pupil);
+            pupilService.savePupil(pupil);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());

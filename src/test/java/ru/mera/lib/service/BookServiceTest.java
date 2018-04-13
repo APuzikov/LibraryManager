@@ -49,33 +49,33 @@ public class BookServiceTest {
         bookRepository.delete(book);
     }
 
-    @Test
-    public void updateBook() throws Exception {
-        String title = "Updated Book";
-        String author = "Updated Author";
-        int count = 15;
-        int publishYear = 2008;
-        int classNumber = 11;
-        boolean enable = false;
-
-        Book book = bookRepository.getOne(2);
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setCount(count);
-        book.setPublishYear(publishYear);
-        book.setClassNumber(classNumber);
-        book.setEnable(enable);
-        bookService.updateBook(book);
-
-        Book updatedBook = bookRepository.getOne(2);
-
-        assertEquals(book.getId(), updatedBook.getId());
-        assertEquals(book.getTitle(), updatedBook.getTitle());
-        assertEquals(book.getAuthor(), updatedBook.getAuthor());
-        assertEquals(book.getClassNumber(), updatedBook.getClassNumber());
-        assertEquals(book.getCount(), updatedBook.getCount());
-        assertEquals(book.getPublishYear(), updatedBook.getPublishYear());
-    }
+//    @Test
+//    public void updateBook() throws Exception {
+//        String title = "Updated Book";
+//        String author = "Updated Author";
+//        int count = 15;
+//        int publishYear = 2008;
+//        int classNumber = 11;
+//        boolean enable = false;
+//
+//        Book book = bookRepository.getOne(2);
+//        book.setTitle(title);
+//        book.setAuthor(author);
+//        book.setCount(count);
+//        book.setPublishYear(publishYear);
+//        book.setClassNumber(classNumber);
+//        book.setEnable(enable);
+//        bookService.updateBook(book);
+//
+//        Book updatedBook = bookRepository.getOne(2);
+//
+//        assertEquals(book.getId(), updatedBook.getId());
+//        assertEquals(book.getTitle(), updatedBook.getTitle());
+//        assertEquals(book.getAuthor(), updatedBook.getAuthor());
+//        assertEquals(book.getClassNumber(), updatedBook.getClassNumber());
+//        assertEquals(book.getCount(), updatedBook.getCount());
+//        assertEquals(book.getPublishYear(), updatedBook.getPublishYear());
+//    }
 
 //    @Test
 //    public void activateBook() throws Exception {
