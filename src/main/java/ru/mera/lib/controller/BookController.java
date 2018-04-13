@@ -49,16 +49,19 @@ public class BookController {
 
     @GetMapping
     public BookPagination findBooks(@RequestParam(name = "title", required = false) String title , //publishYear
-                                @RequestParam(name = "author", required = false) String author,
-                                @RequestParam(name = "classNumber", required = false) Integer classNumber,
-                                @RequestParam(name = "page", required = false) Integer page){
+                                    @RequestParam(name = "author", required = false) String author,
+                                    @RequestParam(name = "classNumber", required = false) Integer classNumber,
+                                    @RequestParam(name = "page", required = false) Integer page,
+                                    @RequestParam(name = "publishYear", required = false) Integer publishYear){
+
 
         if (title == null) title = "";
         if (author == null) author = "";
         if (classNumber == null) classNumber = 0;
+        if (publishYear == null) publishYear = 0;
         if (page == null) page = 1;
 
-        List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber);
+        List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber, publishYear);
 
         books.sort(Comparator.comparing(Book::getTitle));
 

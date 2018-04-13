@@ -87,11 +87,16 @@ public class BookService {
                 collect(Collectors.toList());
     }
 
-    public List<Book> findBooks(String title, String author, Integer classNumber){
+    public List<Book> findBooks(String title, String author, Integer classNumber, Integer publishYear){
+        if (classNumber != 0 && publishYear != 0){
+            return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumberAndPublishYear(title, author, classNumber, publishYear);
+        }
         if (classNumber != 0) {
             return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumber(title, author, classNumber);
         }
-
+        if (publishYear != 0) {
+            return  bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndPublishYear(title, author, publishYear);
+        }
         return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLike(title, author);
     }
 }
