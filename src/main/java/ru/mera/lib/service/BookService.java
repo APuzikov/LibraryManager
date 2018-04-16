@@ -25,14 +25,23 @@ public class BookService {
     @Autowired
     private PupilService pupilService;
 
-    private boolean bookNotExist(Book book) {
+    private boolean bookNotExistForSave(Book book) {
         Book bookFromDB = bookRepository.findByTitleIgnoreCaseAndAuthorIgnoreCaseAndPublishYearAndClassNumber(book.getTitle(),
                 book.getAuthor(), book.getPublishYear(), book.getClassNumber());
         return bookFromDB == null;
     }
 
+    private boolean bookNotExistForUpdate(Book book) {
+        Book bookFromDB = bookRepository.findByTitleIgnoreCaseAndAuthorIgnoreCaseAndPublishYearAndClassNumber(book.getTitle(),
+                book.getAuthor(), book.getPublishYear(), book.getClassNumber());
+
+        return bookFromDB == null || bookFromDB.getId() == book.getId();
+    }
+
+
+
     public void saveBook(Book book) {
-        Assert.isTrue(bookNotExist(book), "This book is already exist!");
+        Assert.isTrue(bookNotExistForSave(book), "This book is already exist!");
         Assert.notNull(book, "Book can't be null!");
         Assert.hasText(book.getAuthor(), "Author is empty!");
         Assert.hasText(book.getTitle(), "Title is empty!");
@@ -41,6 +50,18 @@ public class BookService {
         Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
         bookRepository.save(book);
     }
+
+    public void updateBook(Book book) {
+        Assert.isTrue(bookNotExistForUpdate(book), "This book is already exist!");
+        Assert.notNull(book, "Book can't be null!");
+        Assert.hasText(book.getAuthor(), "Author is empty!");
+        Assert.hasText(book.getTitle(), "Title is empty!");
+        Assert.isTrue(book.getPublishYear() >= 0, "Invalid year of publication!");
+        Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
+        Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
+        bookRepository.save(book);
+    }
+
 
     public Book getOneBook(int id) {
         return bookRepository.findById(id).orElse(null);

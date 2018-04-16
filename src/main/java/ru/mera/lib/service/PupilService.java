@@ -27,20 +27,35 @@ public class PupilService {
     @Autowired
     private BookService bookService;
 
-    private boolean pupilNotExist(Pupil pupil){
+    private boolean pupilNotExistForSave(Pupil pupil){
         Pupil pupilFromDB = pupilRepository.findByNameIgnoreCaseAndClassNumberAndClassNameIgnoreCase(pupil.getName(),
                 pupil.getClassNumber(), pupil.getClassName());
         return pupilFromDB == null;
     }
 
+    private boolean pupilNotExistForUpdate(Pupil pupil){
+        Pupil pupilFromDB = pupilRepository.findByNameIgnoreCaseAndClassNumberAndClassNameIgnoreCase(pupil.getName(),
+                pupil.getClassNumber(), pupil.getClassName());
+
+        return pupilFromDB == null || pupilFromDB.getId() == pupil.getId();
+    }
+
     public void savePupil(Pupil pupil){
-                Assert.isTrue(pupilNotExist(pupil), "This pupil is already exist!");
+                Assert.isTrue(pupilNotExistForSave(pupil), "This pupil is already exist!");
                 Assert.notNull(pupil, "Pupil can't be null!");
                 Assert.hasText(pupil.getName(), "Name of pupil is empty!");
                 Assert.isTrue(pupil.getClassNumber() >= 0, "Invalid class number!");
                 pupilRepository.save(pupil);
     }
-    
+
+    public void updatePupil(Pupil pupil){
+        Assert.isTrue(pupilNotExistForUpdate(pupil), "This pupil is already exist!");
+        Assert.notNull(pupil, "Pupil can't be null!");
+        Assert.hasText(pupil.getName(), "Name of pupil is empty!");
+        Assert.isTrue(pupil.getClassNumber() >= 0, "Invalid class number!");
+        pupilRepository.save(pupil);
+    }
+
     public Pupil getOnePupil(int id) {
         return pupilRepository.findById(id).orElse(null);
     }

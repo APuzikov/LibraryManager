@@ -38,7 +38,7 @@ public class BookController {
     @PutMapping
     public ResponseEntity updateBook(@RequestBody Book book, HttpServletResponse response) throws IOException {
         try {
-            bookService.saveBook(book);
+            bookService.updateBook(book);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());

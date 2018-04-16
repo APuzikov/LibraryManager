@@ -20,4 +20,5 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumberAndPublishYear(String title, String author, Integer classNumber, Integer publishYear);
 
     List<Book> findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndPublishYear(String title, String author, Integer publishYear);
+
 }

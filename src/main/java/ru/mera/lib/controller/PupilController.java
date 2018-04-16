@@ -35,7 +35,7 @@ public class PupilController {
     @PutMapping
     public ResponseEntity updatePupil(@RequestBody Pupil pupil, HttpServletResponse response) throws IOException {
         try {
-            pupilService.savePupil(pupil);
+            pupilService.updatePupil(pupil);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
