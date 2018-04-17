@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
+import ru.mera.lib.model.BookPagination;
 import ru.mera.lib.model.PupilPagination;
+import ru.mera.lib.service.BookService;
 import ru.mera.lib.service.PupilService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -19,6 +21,9 @@ public class PupilController {
 
     @Autowired
     private PupilService pupilService;
+
+    @Autowired
+    private BookService bookService;
 
     @PostMapping
     public ResponseEntity savePupil(@RequestBody Pupil pupil, HttpServletResponse response) throws IOException {
@@ -51,31 +56,10 @@ public class PupilController {
 
         if (name == null) name = "";
         if (classNumber == null) classNumber = 0;
-        if (page == null) page = 1;
 
         List<Pupil> pupils = pupilService.findPupils("%" + name + "%", classNumber, className);
-        pupils.sort((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));//   сортировка по-имени
 
-        int totalItems = pupils.size();
-        int listSize = pupils.size();
-        int pageCount;
-        int lastIndex;
-
-        if (listSize%10 == 0){
-            pageCount = listSize/10;
-        } else pageCount = listSize/10 + 1;
-
-        if (page > pageCount) return new PupilPagination(Collections.emptyList(), 1, totalItems);
-
-        if (!pupils.isEmpty() && listSize > 10) {
-            int firstIndex = (page - 1) * 10;
-
-            if (listSize >= (page - 1) * 10 + 10) {
-                lastIndex = (page - 1) * 10 + 10;
-            } else lastIndex = (page - 1) * 10 + listSize % 10;
-            return new PupilPagination(pupils.subList(firstIndex, lastIndex), pageCount, totalItems);
-
-        } else return new PupilPagination(pupils, pageCount,totalItems);
+        return pupilService.pagination(pupils, page);
     }
 
     @DeleteMapping("/{id}")
@@ -88,20 +72,12 @@ public class PupilController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/{id}")
-    public Pupil getOnePupil (@PathVariable int id){
-        return pupilService.getOnePupil(id);
-    }
 
     //      возвращает все книги выданные ученику
-//    @GetMapping("/getPupilBooks/{id}")
-//    public List<Book> getPupilBooks(@PathVariable int id){
-//        return pupilService.getPupilBooks(id);
-//    }
-
-    @GetMapping("/count")
-    public int getPupilCount(){
-        return pupilService.getPupilCount();
+    @GetMapping("/{pupilId}")
+    public BookPagination getPupilBooks(@PathVariable int pupilId,
+                                        @RequestParam(required = false) Integer page){
+        List<Book> books = pupilService.getPupilBooks(pupilId);
+        return bookService.pagination(books, page);
     }
-
 }

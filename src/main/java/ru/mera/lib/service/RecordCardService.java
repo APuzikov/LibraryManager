@@ -5,10 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.RecordCard;
+import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.repository.RecordCardRepository;
 
+import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RecordCardService {

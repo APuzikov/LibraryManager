@@ -36,13 +36,13 @@ public class UserService {
         }
     }
 
-    public User create(User user) {
+    public void create(User user) {
         Assert.isTrue(userRepository.findByUsername(user.getUsername()) == null, "username already exist");
         Assert.notNull(user, "user is null");
         Assert.hasText(user.getUsername(), "username is empty");
         Assert.hasText(user.getPassword(), "password is empty");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
 //    @Override

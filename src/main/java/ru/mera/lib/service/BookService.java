@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.entity.RecordCard;
+import ru.mera.lib.model.BookPagination;
 import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.repository.RecordCardRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,13 +59,13 @@ public class BookService {
         Assert.hasText(book.getAuthor(), "Author is empty!");
         Assert.hasText(book.getTitle(), "Title is empty!");
         Assert.isTrue(book.getPublishYear() >= 0, "Invalid year of publication!");
-        Assert.isTrue(book.getCount() > 0, "Count of books can't be less zero!");
+        Assert.isTrue(book.getCount() >= 0, "Count of books can't be less zero!");
         Assert.isTrue(book.getClassNumber() >= 0, "Class number can't be less zero!");
         bookRepository.save(book);
     }
 
 
-    public Book getOneBook(int id) {
+    Book getOneBook(int id) {
         return bookRepository.findById(id).orElse(null);
     }
 
@@ -78,27 +80,6 @@ public class BookService {
         } else throw new IllegalArgumentException("This book is not present in library!");
     }
 
-    public List<Pupil> getBookPupils(int id) {
-        List<Pupil> pupils = new ArrayList<>();
-        List<RecordCard> recordCards = recordCardRepository.findByBookIdAndReturnDate(id, null);
-        for (RecordCard recordCard : recordCards) {
-            pupils.add(pupilService.getOnePupil(recordCard.getPupilId()));
-        }
-        return pupils;
-    }
-
-    public int getBookCount() {
-        return (int) bookRepository.count();
-    }
-
-    public List<Book> getAllAvailableBooks(int pupilId) {
-        List<Book> books = bookRepository.findByEnable(true);
-
-        return books.stream().filter(book -> recordCardRepository.
-                findByBookIdAndPupilIdAndReturnDate(book.getId(), pupilId, null) == null && book.getCount() > 0).
-                collect(Collectors.toList());
-    }
-
     public List<Book> findBooks(String title, String author, Integer classNumber, Integer publishYear) {
         if (classNumber != 0 && publishYear != 0) {
             return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndClassNumberAndPublishYear(title, author, classNumber, publishYear);
@@ -110,5 +91,39 @@ public class BookService {
             return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLikeAndPublishYear(title, author, publishYear);
         }
         return bookRepository.findByTitleIgnoreCaseLikeAndAuthorIgnoreCaseLike(title, author);
+    }
+
+    //книги доступные для выдачи
+    public List<Book> availableBooksForReceive(String title, String author, Integer classNumber, Integer publishYear, int pupilId){
+        List<Book> books = findBooks(title, author, classNumber, publishYear);
+        books = books.stream().filter(book -> recordCardRepository.
+                findByBookIdAndPupilIdAndReturnDate(book.getId(), pupilId, null) == null &&
+                book.getCount() > 0 &&
+                book.isEnable()).collect(Collectors.toList());
+        return books;
+    }
+
+    public BookPagination pagination(List<Book> books, Integer page){
+        books.sort((b1, b2) -> b1.getTitle().compareToIgnoreCase(b2.getTitle())); //сортируем книги
+
+        int listSize = books.size();
+        int pageCount;
+        int lastIndex;
+        if (page == null) page = 1;
+
+        if (listSize%10 == 0){
+            pageCount = listSize/10;
+        } else pageCount = listSize/10 + 1;
+
+        if (page > pageCount) return new BookPagination(Collections.emptyList(), 1, listSize);
+
+        if (!books.isEmpty() && listSize > 10) {
+            int firstIndex = (page - 1) * 10;
+
+            if (listSize >= (page - 1) * 10 + 10) {
+                lastIndex = (page - 1) * 10 + 10;
+            } else lastIndex = (page - 1) * 10 + listSize % 10;
+            return new BookPagination(books.subList(firstIndex, lastIndex), pageCount, listSize);
+        } else return new BookPagination(books, pageCount, listSize);
     }
 }

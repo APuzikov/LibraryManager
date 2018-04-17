@@ -32,7 +32,7 @@ public class LoginController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
         @PostMapping("/login")
-        public ResponseEntity login(@RequestBody LoginForm loginForm, HttpServletResponse response) throws IOException {
+        public ResponseEntity login(@RequestBody LoginForm loginForm, HttpServletResponse response){
 
             User user = userRepository.findByUsername(loginForm.getUsername());
 

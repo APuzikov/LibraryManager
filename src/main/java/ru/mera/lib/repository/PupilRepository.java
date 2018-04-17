@@ -17,4 +17,6 @@ public interface PupilRepository extends JpaRepository<Pupil, Integer>{
     List<Pupil> findByNameIgnoreCaseLikeAndClassNameIgnoreCase(String name, String className);
 
     List<Pupil> findByNameIgnoreCaseLike(String name);
+
+    List<Pupil> findByNameIgnoreCaseLikeAndClassNameIgnoreCaseAndClassNumber(String name, String className, Integer classNumber);
 }

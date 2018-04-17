@@ -8,10 +8,10 @@ import ru.mera.lib.entity.Book;
 import ru.mera.lib.model.BookPagination;
 import ru.mera.lib.repository.BookRepository;
 import ru.mera.lib.service.BookService;
+import ru.mera.lib.service.RecordCardService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -23,6 +23,9 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private RecordCardService recordCardService;
 
     @PostMapping
     public ResponseEntity saveBook(@RequestBody Book book, HttpServletResponse response) throws IOException {
@@ -47,41 +50,20 @@ public class BookController {
     }
 
     @GetMapping
-    public BookPagination findBooks(@RequestParam(name = "title", required = false) String title , //publishYear
+    public BookPagination findBooks(@RequestParam(name = "title", required = false) String title,
                                     @RequestParam(name = "author", required = false) String author,
                                     @RequestParam(name = "classNumber", required = false) Integer classNumber,
-                                    @RequestParam(name = "page", required = false) Integer page,
-                                    @RequestParam(name = "publishYear", required = false) Integer publishYear){
+                                    @RequestParam(name = "publishYear", required = false) Integer publishYear,
+                                    @RequestParam(name = "page", required = false) Integer page){
 
         if (title == null) title = "";
         if (author == null) author = "";
         if (classNumber == null) classNumber = 0;
         if (publishYear == null) publishYear = 0;
-        if (page == null) page = 1;
 
         List<Book> books = bookService.findBooks("%" + title + "%", "%" + author + "%", classNumber, publishYear);
-        books.sort((b1, b2) -> b1.getTitle().compareToIgnoreCase(b2.getTitle()));
 
-        int totalItems = books.size();
-        int listSize = books.size();
-        int pageCount;
-        int lastIndex;
-
-        if (listSize%10 == 0){
-            pageCount = listSize/10;
-        } else pageCount = listSize/10 + 1;
-
-        if (page > pageCount) return new BookPagination(Collections.emptyList(), 1, totalItems);
-
-        if (!books.isEmpty() && listSize > 10) {
-            int firstIndex = (page - 1) * 10;
-
-            if (listSize >= (page - 1) * 10 + 10) {
-                lastIndex = (page - 1) * 10 + 10;
-            } else lastIndex = (page - 1) * 10 + listSize % 10;
-            return new BookPagination(books.subList(firstIndex, lastIndex), pageCount, totalItems);
-
-        } else return new BookPagination(books, pageCount, totalItems);
+        return bookService.pagination(books, page);
     }
 
     @DeleteMapping("/{id}")
@@ -95,13 +77,20 @@ public class BookController {
         }
     }
 
-    @GetMapping("/{id}")
-    public Book getOneBook(@PathVariable int id){
-        return bookService.getOneBook(id);
-    }
+    @GetMapping("/{pupilId}")
+    public BookPagination availableBooksForReceive(@PathVariable int pupilId,
+                                                   @RequestParam(name = "title", required = false) String title , //publishYear
+                                                   @RequestParam(name = "author", required = false) String author,
+                                                   @RequestParam(name = "classNumber", required = false) Integer classNumber,
+                                                   @RequestParam(name = "publishYear", required = false) Integer publishYear,
+                                                   @RequestParam(name = "page", required = false) Integer page){
 
-    @GetMapping("/count")
-    public int getBookCount(){
-        return bookService.getBookCount();
+        if (title == null) title = "";
+        if (author == null) author = "";
+        if (classNumber == null) classNumber = 0;
+        if (publishYear == null) publishYear = 0;
+
+        List<Book> books = bookService.availableBooksForReceive("%" + title + "%", "%" + author + "%", classNumber, publishYear, pupilId);
+        return bookService.pagination(books, page);
     }
 }

@@ -8,10 +8,13 @@ import org.springframework.util.Assert;
 import ru.mera.lib.entity.Book;
 import ru.mera.lib.entity.Pupil;
 import ru.mera.lib.entity.RecordCard;
+import ru.mera.lib.model.BookPagination;
+import ru.mera.lib.model.PupilPagination;
 import ru.mera.lib.repository.PupilRepository;
 import ru.mera.lib.repository.RecordCardRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,13 +63,14 @@ public class PupilService {
         return pupilRepository.findById(id).orElse(null);
     }
 
-    public List<Book> getPupilBooks(int id) {
+
+    public List<Book> getPupilBooks(int pupilId) {
         List<Book> books = new ArrayList<>();
-        List<RecordCard> recordCards = recordCardRepository.findByPupilIdAndReturnDate(id, null);
+        List<RecordCard> recordCards = recordCardRepository.findByPupilIdAndReturnDate(pupilId, null);
         for (RecordCard recordCard : recordCards){
             books.add(bookService.getOneBook(recordCard.getBookId()));
         }
-        return books;
+        return books ;
     }
 
     public int getPupilCount() {
@@ -83,17 +87,37 @@ public class PupilService {
             return pupilRepository.findByNameIgnoreCaseLikeAndClassNumber(name, classNumber);
         }
 
-        return pupilRepository.findByNameIgnoreCaseLikeAndClassNameIgnoreCase(name, className);
+        if (classNumber == 0){
+            return pupilRepository.findByNameIgnoreCaseLikeAndClassNameIgnoreCase(name, className);
+        }
+
+        return pupilRepository.findByNameIgnoreCaseLikeAndClassNameIgnoreCaseAndClassNumber(name, className, classNumber);
     }
 
-    public ResponseEntity removePupil(int id) {
-        Optional<Pupil> pupil = pupilRepository.findById(id);
-        try {
-            pupil.ifPresent(p -> pupilRepository.delete(p));
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+    public PupilPagination pagination(List<Pupil> pupils, Integer page){
+
+        pupils.sort((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));//   сортировка по-имени
+
+        int listSize = pupils.size();
+        int pageCount;
+        int lastIndex;
+        if (page == null) page = 1;
+
+        if (listSize%10 == 0){
+            pageCount = listSize/10;
+        } else pageCount = listSize/10 + 1;
+
+        if (page > pageCount) return new PupilPagination(Collections.emptyList(), 1, listSize);
+
+        if (!pupils.isEmpty() && listSize > 10) {
+            int firstIndex = (page - 1) * 10;
+
+            if (listSize >= (page - 1) * 10 + 10) {
+                lastIndex = (page - 1) * 10 + 10;
+            } else lastIndex = (page - 1) * 10 + listSize % 10;
+            return new PupilPagination(pupils.subList(firstIndex, lastIndex), pageCount, listSize);
+
+        } else return new PupilPagination(pupils, pageCount, listSize);
     }
 
     public void deletePupil(int id) {
