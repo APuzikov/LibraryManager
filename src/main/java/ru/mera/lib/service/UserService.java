@@ -44,13 +44,4 @@ public class UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user =  userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found!"));
-//
-//        Collection<? extends GrantedAuthority> authorities = user.getAuthorities().stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-//        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
-//    }
 }

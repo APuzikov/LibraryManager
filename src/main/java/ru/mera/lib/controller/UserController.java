@@ -15,7 +15,6 @@ import ru.mera.lib.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.mera.lib.config.SecurityConstants.*;
@@ -34,19 +33,19 @@ public class UserController {
     public ResponseEntity createUser(@RequestBody User user, HttpServletResponse response) throws IOException {
 
         try {
-            List<String> roles = new ArrayList<>();
+            List<String> roles = user.getRoles();
             roles.add("USER");
             user.setRoles(roles);
             userService.create(user);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "username already exist");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteUser(@RequestParam int userId, HttpServletResponse response) throws IOException {
+    @DeleteMapping("/{userId}")
+    public ResponseEntity deleteUser(@PathVariable int userId, HttpServletResponse response) throws IOException {
 
         try {
             userRepository.findById(userId).ifPresent(user -> userRepository.delete(user));
