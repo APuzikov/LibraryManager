@@ -65,8 +65,18 @@ public class UserController {
             userRepository.save(user);
             return new ResponseEntity(HttpStatus.OK);
         }  catch (Exception e){
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "can't update user");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Can't update user");
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping
+    public List<User> allUsers(HttpServletResponse response) throws IOException {
+        try{
+            return userRepository.findAll();
+        } catch (Exception e){
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Can't find all users");
+            return null;
         }
     }
 

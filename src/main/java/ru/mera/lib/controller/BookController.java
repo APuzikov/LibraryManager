@@ -84,7 +84,6 @@ public class BookController {
                                                    @RequestParam(name = "classNumber", required = false) Integer classNumber,
                                                    @RequestParam(name = "publishYear", required = false) Integer publishYear,
                                                    @RequestParam(name = "page", required = false) Integer page){
-
         if (title == null) title = "";
         if (author == null) author = "";
         if (classNumber == null) classNumber = 0;
